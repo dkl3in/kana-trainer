@@ -2,7 +2,77 @@
   <div class="app">
     <header class="app__header">
       <h1 class="app__title">Kana Trainer</h1>
+    </header>
 
+    <!-- QUIZ -->
+    <main class="quiz" v-if="view === 'quiz'">
+      <div class="quiz__prompt">
+        <div class="quiz__kana">{{ current?.kana }}</div>
+      </div>
+
+      <div class="quiz__options">
+        <button
+          v-for="opt in options"
+          :key="opt.id"
+          class="quiz__option"
+          :disabled="answered"
+          @click="submit(opt)"
+        >
+          {{ opt.romaji }}
+        </button>
+      </div>
+
+      <div class="quiz__feedback" v-if="answered">
+        <p
+          class="quiz__message"
+          :class="{
+            'quiz__message--correct': isCorrect,
+            'quiz__message--wrong': !isCorrect
+          }"
+        >
+          {{ isCorrect ? 'Richtig!' : `Falsch – richtig ist: ${current.romaji}` }}
+        </p>
+
+        <p class="quiz__countdown">
+          Weiter in <span class="quiz__countdown-num">{{ countdown }}</span>s
+        </p>
+
+        <button class="quiz__next-link" @click="next">Nächstes Zeichen</button>
+      </div>
+    </main>
+
+    <!-- STATS -->
+    <section class="stats" v-if="view === 'stats'">
+      <h2 class="stats__title">Statistik</h2>
+      <p class="stats__subtitle">Zeichen mit Fehlern (absteigend)</p>
+
+      <div class="stats__table">
+        <div class="stats__row stats__row--head">
+          <div>Zeichen</div>
+          <div>Romaji</div>
+          <div>Script</div>
+          <div>Falsch</div>
+          <div>Richtig</div>
+          <div>Streak</div>
+        </div>
+
+        <div v-for="item in wrongList" :key="item.id" class="stats__row">
+          <div class="stats__kana">{{ item.kana }}</div>
+          <div>{{ item.romaji }}</div>
+          <div>{{ item.script }}</div>
+          <div>{{ item.wrong }}</div>
+          <div>{{ item.correct }}</div>
+          <div>{{ item.streak }}</div>
+        </div>
+
+        <div v-if="wrongList.length === 0" class="stats__empty">
+          Noch keine Fehler 🎉
+        </div>
+      </div>
+    </section>
+
+    <!-- Tabs, Modus, Fortschritt -->
+    <div class="app__controls-panel">
       <!-- Tabs -->
       <div class="tabs">
         <button
@@ -77,74 +147,7 @@
       <div class="app__actions" v-if="view === 'quiz'">
         <button class="app__reset" @click="resetProgress">Fortschritt zurücksetzen</button>
       </div>
-    </header>
-
-    <!-- QUIZ -->
-    <main class="quiz" v-if="view === 'quiz'">
-      <div class="quiz__prompt">
-        <div class="quiz__kana">{{ current?.kana }}</div>
-      </div>
-
-      <div class="quiz__options">
-        <button
-          v-for="opt in options"
-          :key="opt.id"
-          class="quiz__option"
-          :disabled="answered"
-          @click="submit(opt)"
-        >
-          {{ opt.romaji }}
-        </button>
-      </div>
-
-      <div class="quiz__feedback" v-if="answered">
-        <p
-          class="quiz__message"
-          :class="{
-            'quiz__message--correct': isCorrect,
-            'quiz__message--wrong': !isCorrect
-          }"
-        >
-          {{ isCorrect ? 'Richtig!' : `Falsch – richtig ist: ${current.romaji}` }}
-        </p>
-
-        <p class="quiz__countdown">
-          Weiter in <span class="quiz__countdown-num">{{ countdown }}</span>s
-        </p>
-
-        <button class="quiz__next-link" @click="next">Nächstes Zeichen</button>
-      </div>
-    </main>
-
-    <!-- STATS -->
-    <section class="stats" v-if="view === 'stats'">
-      <h2 class="stats__title">Statistik</h2>
-      <p class="stats__subtitle">Zeichen mit Fehlern (absteigend)</p>
-
-      <div class="stats__table">
-        <div class="stats__row stats__row--head">
-          <div>Zeichen</div>
-          <div>Romaji</div>
-          <div>Script</div>
-          <div>Falsch</div>
-          <div>Richtig</div>
-          <div>Streak</div>
-        </div>
-
-        <div v-for="item in wrongList" :key="item.id" class="stats__row">
-          <div class="stats__kana">{{ item.kana }}</div>
-          <div>{{ item.romaji }}</div>
-          <div>{{ item.script }}</div>
-          <div>{{ item.wrong }}</div>
-          <div>{{ item.correct }}</div>
-          <div>{{ item.streak }}</div>
-        </div>
-
-        <div v-if="wrongList.length === 0" class="stats__empty">
-          Noch keine Fehler 🎉
-        </div>
-      </div>
-    </section>
+    </div>
 
     <footer class="app__footer">
       <small>Freischaltung: jedes Paket (8) benötigt 2× richtige Streak pro Zeichen</small>
