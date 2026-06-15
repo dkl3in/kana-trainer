@@ -1,16 +1,10 @@
 <template>
   <div class="overview">
-    <div class="overview__controls">
-      <button
-        class="learn__toggle"
-        :class="{ 'learn__toggle--active': script === 'hiragana' }"
-        @click="script = 'hiragana'"
-      >Hiragana</button>
-      <button
-        class="learn__toggle"
-        :class="{ 'learn__toggle--active': script === 'katakana' }"
-        @click="script = 'katakana'"
-      >Katakana</button>
+    <div class="overview__controls mode-tabs-wrap">
+      <div class="mode-tabs">
+        <button class="mode-tabs__btn" :class="{ 'mode-tabs__btn--active': script === 'hiragana' }" @click="script = 'hiragana'">あ</button>
+        <button class="mode-tabs__btn" :class="{ 'mode-tabs__btn--active': script === 'katakana' }" @click="script = 'katakana'">ア</button>
+      </div>
     </div>
 
     <!-- Gojūon table -->

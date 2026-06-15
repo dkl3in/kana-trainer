@@ -2,17 +2,11 @@
   <div class="learn">
     <!-- Controls -->
     <div class="learn__controls">
-      <div class="learn__toggle-group">
-        <button
-          class="learn__toggle"
-          :class="{ 'learn__toggle--active': script === 'hiragana' }"
-          @click="script = 'hiragana'"
-        >Hiragana</button>
-        <button
-          class="learn__toggle"
-          :class="{ 'learn__toggle--active': script === 'katakana' }"
-          @click="script = 'katakana'"
-        >Katakana</button>
+      <div class="mode-tabs-wrap">
+        <div class="mode-tabs">
+          <button class="mode-tabs__btn" :class="{ 'mode-tabs__btn--active': script === 'hiragana' }" @click="script = 'hiragana'">あ</button>
+          <button class="mode-tabs__btn" :class="{ 'mode-tabs__btn--active': script === 'katakana' }" @click="script = 'katakana'">ア</button>
+        </div>
       </div>
       <div class="learn__toggle-group">
         <button

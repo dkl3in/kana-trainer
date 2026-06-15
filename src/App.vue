@@ -2,6 +2,14 @@
   <div class="app">
     <!-- QUIZ -->
     <template v-if="view === 'quiz'">
+      <div class="mode-tabs-wrap" v-if="!blockFocusIds">
+        <div class="mode-tabs">
+          <button class="mode-tabs__btn" :class="{ 'mode-tabs__btn--active': mode === 'hiragana' }" @click="mode = 'hiragana'">あ</button>
+          <button class="mode-tabs__btn" :class="{ 'mode-tabs__btn--active': mode === 'katakana' }" @click="mode = 'katakana'">ア</button>
+          <button class="mode-tabs__btn" :class="{ 'mode-tabs__btn--active': mode === 'mixed' }" @click="mode = 'mixed'">あ·ア</button>
+        </div>
+      </div>
+
       <main class="quiz">
         <div class="block-mode-banner" v-if="blockFocusIds">
           <span class="block-mode-banner__label">Block-Modus: {{ blockLabel }}</span>
@@ -46,69 +54,46 @@
         </div>
       </main>
 
-      <div class="quiz__settings">
-        <div class="app__controls">
-          <label class="app__control">
-            Modus:
-            <select v-model="mode" class="app__select">
-              <option value="hiragana">Hiragana</option>
-              <option value="katakana">Katakana</option>
-              <option value="mixed">Gemischt</option>
-            </select>
-          </label>
 
-          <div class="app__status">
-            <span>Hira-Level: {{ hiraLevel + 1 }}</span>
-            <span>Kata-Level: {{ kataLevel + 1 }}</span>
-            <span>Extras-Level: {{ extraLevel + 1 }}</span>
-            <span>Basis gemeistert: {{ baseMastered ? 'Ja' : 'Nein' }}</span>
-          </div>
-        </div>
-
-        <div class="progress">
-          <div class="progress__block">
-            <div class="progress__label">Hiragana (Basis)</div>
-            <div class="progress__bar">
-              <div class="progress__fill" :style="{ width: hiraProgress + '%' }"></div>
-            </div>
-            <div class="progress__text">{{ hiraMastered }} / {{ totalHiraBase }} gemeistert</div>
-          </div>
-
-          <div class="progress__block">
-            <div class="progress__label">Katakana (Basis)</div>
-            <div class="progress__bar">
-              <div class="progress__fill progress__fill--accent" :style="{ width: kataProgress + '%' }"></div>
-            </div>
-            <div class="progress__text">{{ kataMastered }} / {{ totalKataBase }} gemeistert</div>
-          </div>
-
-          <div class="progress__block">
-            <div class="progress__label">Extras (Dakuten + Yōon)</div>
-            <div class="progress__bar">
-              <div class="progress__fill progress__fill--gold" :style="{ width: extraProgress + '%' }"></div>
-            </div>
-            <div class="progress__text">{{ extraMastered }} / {{ totalExtras }} gemeistert</div>
-          </div>
-        </div>
-
-        <div class="badges">
-          <div class="badges__title">Badges</div>
-          <div class="badges__list">
-            <span v-for="b in badges" :key="b.id" class="badges__item" :class="b.unlocked && 'badges__item--on'">
-              <Icon :icon="b.icon" class="badges__icon" /> {{ b.title }}
-            </span>
-          </div>
-        </div>
-
-        <div class="app__actions">
-          <button class="app__reset" @click="resetProgress">Fortschritt zurücksetzen</button>
-        </div>
-      </div>
     </template>
 
     <!-- STATS -->
     <section class="stats" v-if="view === 'stats'">
       <h2 class="stats__title">Statistik</h2>
+
+      <div class="app__status">
+        <span>Hira-Level: {{ hiraLevel + 1 }}</span>
+        <span>Kata-Level: {{ kataLevel + 1 }}</span>
+        <span>Extras-Level: {{ extraLevel + 1 }}</span>
+        <span>Basis gemeistert: {{ baseMastered ? 'Ja' : 'Nein' }}</span>
+      </div>
+
+      <div class="progress">
+        <div class="progress__block">
+          <div class="progress__label">Hiragana (Basis)</div>
+          <div class="progress__bar">
+            <div class="progress__fill" :style="{ width: hiraProgress + '%' }"></div>
+          </div>
+          <div class="progress__text">{{ hiraMastered }} / {{ totalHiraBase }} gemeistert</div>
+        </div>
+
+        <div class="progress__block">
+          <div class="progress__label">Katakana (Basis)</div>
+          <div class="progress__bar">
+            <div class="progress__fill progress__fill--accent" :style="{ width: kataProgress + '%' }"></div>
+          </div>
+          <div class="progress__text">{{ kataMastered }} / {{ totalKataBase }} gemeistert</div>
+        </div>
+
+        <div class="progress__block">
+          <div class="progress__label">Extras (Dakuten + Yōon)</div>
+          <div class="progress__bar">
+            <div class="progress__fill progress__fill--gold" :style="{ width: extraProgress + '%' }"></div>
+          </div>
+          <div class="progress__text">{{ extraMastered }} / {{ totalExtras }} gemeistert</div>
+        </div>
+      </div>
+
       <p class="stats__subtitle">Zeichen mit Fehlern (absteigend)</p>
 
       <div class="stats__list">
@@ -135,7 +120,35 @@
           <Icon icon="carbon:checkmark-outline" class="stats__empty-icon" /> Noch keine Fehler
         </div>
       </div>
+
+      <div class="badges">
+        <div class="badges__title">Badges</div>
+        <div class="badges__list">
+          <span v-for="b in badges" :key="b.id" class="badges__item" :class="b.unlocked && 'badges__item--on'">
+            <Icon :icon="b.icon" class="badges__icon" /> {{ b.title }}
+          </span>
+        </div>
+      </div>
+
+      <div class="app__actions">
+        <button class="app__reset" @click="showResetConfirm = true">Fortschritt zurücksetzen</button>
+      </div>
     </section>
+
+    <!-- Reset Confirmation Overlay -->
+    <Teleport to="body">
+      <div v-if="showResetConfirm" class="reset-overlay" @click.self="showResetConfirm = false">
+        <div class="reset-dialog">
+          <div class="reset-dialog__icon"><Icon icon="carbon:warning-filled" /></div>
+          <h3 class="reset-dialog__title">Fortschritt wirklich zurücksetzen?</h3>
+          <p class="reset-dialog__text">Alle Lernfortschritte, Statistiken und Streaks werden <strong>unwiderruflich gelöscht</strong>. Diese Aktion kann nicht rückgängig gemacht werden.</p>
+          <div class="reset-dialog__actions">
+            <button class="reset-dialog__cancel" @click="showResetConfirm = false">Abbrechen</button>
+            <button class="reset-dialog__confirm" @click="resetProgress">Ja, alles löschen</button>
+          </div>
+        </div>
+      </div>
+    </Teleport>
 
     <!-- LEARN -->
     <section class="learn-view" v-if="view === 'learn'">
@@ -454,7 +467,10 @@ function loadProgress() {
   }
 }
 
+const showResetConfirm = ref(false)
+
 function resetProgress() {
+  showResetConfirm.value = false
   localStorage.removeItem(STORAGE_KEY)
   allItems.forEach(i => {
     i.correct = 0
