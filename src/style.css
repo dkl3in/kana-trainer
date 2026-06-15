@@ -567,8 +567,8 @@ body {
 
 .learn__controls {
   display: flex;
+  flex-direction: column;
   gap: 12px;
-  flex-wrap: wrap;
   align-items: center;
   justify-content: center;
 }
