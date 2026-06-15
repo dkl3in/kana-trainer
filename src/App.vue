@@ -1,251 +1,186 @@
 <template>
   <div class="app">
-    <header class="app__header">
-      <h1 class="app__title">Kana Trainer</h1>
-    </header>
-
     <!-- QUIZ -->
-    <main class="quiz" v-if="view === 'quiz'">
-      <div class="quiz__prompt">
-        <div class="quiz__kana">{{ current?.kana }}</div>
+    <template v-if="view === 'quiz'">
+      <main class="quiz">
+        <div class="block-mode-banner" v-if="blockFocusIds">
+          <span class="block-mode-banner__label">Block-Modus: {{ blockLabel }}</span>
+          <button class="block-mode-banner__exit" @click="clearBlockMode">× Zum vollen Quiz</button>
+        </div>
+        <div class="quiz__prompt">
+          <div class="quiz__kana">{{ current?.kana }}</div>
+        </div>
+
+        <div class="quiz__options">
+          <button
+            v-for="opt in options"
+            :key="opt.id"
+            class="quiz__option"
+            :disabled="answered"
+            @click="submit(opt)"
+          >
+            {{ opt.romaji }}
+          </button>
+        </div>
+
+        <div class="quiz__feedback" v-if="answered">
+          <p
+            class="quiz__message"
+            :class="{
+              'quiz__message--correct': isCorrect,
+              'quiz__message--wrong': !isCorrect
+            }"
+          >
+            {{ isCorrect ? 'Richtig!' : `Falsch – richtig ist: ${current.romaji}` }}
+          </p>
+
+          <p class="quiz__countdown">
+            Weiter in <span class="quiz__countdown-num">{{ countdown }}</span>s
+          </p>
+
+          <button class="quiz__next-link" @click="next">Nächstes Zeichen</button>
+        </div>
+      </main>
+
+      <div class="quiz__settings">
+        <div class="app__controls">
+          <label class="app__control">
+            Modus:
+            <select v-model="mode" class="app__select">
+              <option value="hiragana">Hiragana</option>
+              <option value="katakana">Katakana</option>
+              <option value="mixed">Gemischt</option>
+            </select>
+          </label>
+
+          <div class="app__status">
+            <span>Hira-Level: {{ hiraLevel + 1 }}</span>
+            <span>Kata-Level: {{ kataLevel + 1 }}</span>
+            <span>Extras-Level: {{ extraLevel + 1 }}</span>
+            <span>Basis gemeistert: {{ baseMastered ? 'Ja' : 'Nein' }}</span>
+          </div>
+        </div>
+
+        <div class="progress">
+          <div class="progress__block">
+            <div class="progress__label">Hiragana (Basis)</div>
+            <div class="progress__bar">
+              <div class="progress__fill" :style="{ width: hiraProgress + '%' }"></div>
+            </div>
+            <div class="progress__text">{{ hiraMastered }} / {{ totalHiraBase }} gemeistert</div>
+          </div>
+
+          <div class="progress__block">
+            <div class="progress__label">Katakana (Basis)</div>
+            <div class="progress__bar">
+              <div class="progress__fill progress__fill--accent" :style="{ width: kataProgress + '%' }"></div>
+            </div>
+            <div class="progress__text">{{ kataMastered }} / {{ totalKataBase }} gemeistert</div>
+          </div>
+
+          <div class="progress__block">
+            <div class="progress__label">Extras (Dakuten + Yōon)</div>
+            <div class="progress__bar">
+              <div class="progress__fill progress__fill--gold" :style="{ width: extraProgress + '%' }"></div>
+            </div>
+            <div class="progress__text">{{ extraMastered }} / {{ totalExtras }} gemeistert</div>
+          </div>
+        </div>
+
+        <div class="badges">
+          <div class="badges__title">Badges</div>
+          <div class="badges__list">
+            <span v-for="b in badges" :key="b.id" class="badges__item" :class="b.unlocked && 'badges__item--on'">
+              <Icon :icon="b.icon" class="badges__icon" /> {{ b.title }}
+            </span>
+          </div>
+        </div>
+
+        <div class="app__actions">
+          <button class="app__reset" @click="resetProgress">Fortschritt zurücksetzen</button>
+        </div>
       </div>
-
-      <div class="quiz__options">
-        <button
-          v-for="opt in options"
-          :key="opt.id"
-          class="quiz__option"
-          :disabled="answered"
-          @click="submit(opt)"
-        >
-          {{ opt.romaji }}
-        </button>
-      </div>
-
-      <div class="quiz__feedback" v-if="answered">
-        <p
-          class="quiz__message"
-          :class="{
-            'quiz__message--correct': isCorrect,
-            'quiz__message--wrong': !isCorrect
-          }"
-        >
-          {{ isCorrect ? 'Richtig!' : `Falsch – richtig ist: ${current.romaji}` }}
-        </p>
-
-        <p class="quiz__countdown">
-          Weiter in <span class="quiz__countdown-num">{{ countdown }}</span>s
-        </p>
-
-        <button class="quiz__next-link" @click="next">Nächstes Zeichen</button>
-      </div>
-    </main>
+    </template>
 
     <!-- STATS -->
     <section class="stats" v-if="view === 'stats'">
       <h2 class="stats__title">Statistik</h2>
       <p class="stats__subtitle">Zeichen mit Fehlern (absteigend)</p>
 
-      <div class="stats__scroll">
-        <div class="stats__table">
-          <div class="stats__row stats__row--head">
-            <div>Zeichen</div>
-            <div>Romaji</div>
-            <div>Script</div>
-            <div>Falsch</div>
-            <div>Richtig</div>
-            <div>Streak</div>
+      <div class="stats__list">
+        <div v-for="item in wrongList" :key="item.id" class="stats__card">
+          <div class="stats__card-left">
+            <span class="stats__kana">{{ item.kana }}</span>
+            <span class="stats__romaji">{{ item.romaji }}</span>
           </div>
+          <span class="stats__script-tag">{{ item.script === 'hiragana' ? 'Hira' : 'Kata' }}</span>
+          <div class="stats__card-right">
+            <span class="stats__pill stats__pill--wrong">
+              <Icon icon="carbon:close-filled" />{{ item.wrong }}
+            </span>
+            <span class="stats__pill stats__pill--correct">
+              <Icon icon="carbon:checkmark-filled" />{{ item.correct }}
+            </span>
+            <span class="stats__pill stats__pill--streak">
+              <Icon icon="carbon:flash" />{{ item.streak }}
+            </span>
+          </div>
+        </div>
 
-          <div v-for="item in wrongList" :key="item.id" class="stats__row">
-            <div class="stats__kana">{{ item.kana }}</div>
-            <div>{{ item.romaji }}</div>
-            <div>{{ item.script }}</div>
-            <div>{{ item.wrong }}</div>
-            <div>{{ item.correct }}</div>
-            <div>{{ item.streak }}</div>
-          </div>
-
-          <div v-if="wrongList.length === 0" class="stats__empty">
-            Noch keine Fehler 🎉
-          </div>
+        <div v-if="wrongList.length === 0" class="stats__empty">
+          <Icon icon="carbon:checkmark-outline" class="stats__empty-icon" /> Noch keine Fehler
         </div>
       </div>
     </section>
 
-    <!-- Tabs, Modus, Fortschritt -->
-    <div class="app__controls-panel">
-      <!-- Tabs -->
-      <div class="tabs">
-        <button
-          class="tabs__btn"
-          :class="{ 'tabs__btn--active': view === 'quiz' }"
-          @click="view = 'quiz'"
-        >
-          Quiz
-        </button>
-        <button
-          class="tabs__btn"
-          :class="{ 'tabs__btn--active': view === 'stats' }"
-          @click="view = 'stats'"
-        >
-          Statistik
-        </button>
-      </div>
+    <!-- LERNEN -->
+    <section class="learn-view" v-if="view === 'learn'">
+      <LearnView :allItems="allItems" @practiceBlock="handlePracticeBlock" />
+    </section>
 
-      <div class="app__controls" v-if="view === 'quiz'">
-        <label class="app__control">
-          Modus:
-          <select v-model="mode" class="app__select">
-            <option value="hiragana">Hiragana</option>
-            <option value="katakana">Katakana</option>
-            <option value="mixed">Gemischt</option>
-          </select>
-        </label>
+    <!-- ÜBERSICHT -->
+    <section v-if="view === 'overview'">
+      <OverviewView />
+    </section>
 
-        <div class="app__status">
-          <span>Hira-Level: {{ hiraLevel + 1 }}</span>
-          <span>Kata-Level: {{ kataLevel + 1 }}</span>
-          <span>Extras-Level: {{ extraLevel + 1 }}</span>
-          <span>Basis gemeistert: {{ baseMastered ? 'Ja' : 'Nein' }}</span>
-        </div>
-      </div>
-
-      <div class="progress" v-if="view === 'quiz'">
-        <div class="progress__block">
-          <div class="progress__label">Hiragana (Basis)</div>
-          <div class="progress__bar">
-            <div class="progress__fill" :style="{ width: hiraProgress + '%' }"></div>
-          </div>
-          <div class="progress__text">{{ hiraMastered }} / {{ totalHiraBase }} gemeistert</div>
-        </div>
-
-        <div class="progress__block">
-          <div class="progress__label">Katakana (Basis)</div>
-          <div class="progress__bar">
-            <div class="progress__fill progress__fill--accent" :style="{ width: kataProgress + '%' }"></div>
-          </div>
-          <div class="progress__text">{{ kataMastered }} / {{ totalKataBase }} gemeistert</div>
-        </div>
-
-        <div class="progress__block">
-          <div class="progress__label">Extras (Dakuten + Yōon)</div>
-          <div class="progress__bar">
-            <div class="progress__fill progress__fill--gold" :style="{ width: extraProgress + '%' }"></div>
-          </div>
-          <div class="progress__text">{{ extraMastered }} / {{ totalExtras }} gemeistert</div>
-        </div>
-      </div>
-
-      <div class="badges" v-if="view === 'quiz'">
-        <div class="badges__title">Badges</div>
-        <div class="badges__list">
-          <span v-for="b in badges" :key="b.id" class="badges__item" :class="b.unlocked && 'badges__item--on'">
-            {{ b.icon }} {{ b.title }}
-          </span>
-        </div>
-      </div>
-
-      <div class="app__actions" v-if="view === 'quiz'">
-        <button class="app__reset" @click="resetProgress">Fortschritt zurücksetzen</button>
-      </div>
-    </div>
-
-    <footer class="app__footer">
-      <small>Freischaltung: jedes Paket (8) benötigt 2× richtige Streak pro Zeichen</small>
-    </footer>
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+      <button class="bottom-nav__btn" :class="{ 'bottom-nav__btn--active': view === 'quiz' }" @click="view = 'quiz'" aria-label="Quiz">
+        <Icon icon="carbon:flash" />
+      </button>
+      <button class="bottom-nav__btn" :class="{ 'bottom-nav__btn--active': view === 'learn' }" @click="view = 'learn'" aria-label="Lernen">
+        <Icon icon="carbon:education" />
+      </button>
+      <button class="bottom-nav__btn" :class="{ 'bottom-nav__btn--active': view === 'overview' }" @click="view = 'overview'" aria-label="Übersicht">
+        <Icon icon="carbon:table" />
+      </button>
+      <button class="bottom-nav__btn" :class="{ 'bottom-nav__btn--active': view === 'stats' }" @click="view = 'stats'" aria-label="Statistik">
+        <Icon icon="carbon:analytics" />
+      </button>
+    </nav>
   </div>
 </template>
 
 <script setup>
 import { computed, reactive, ref, watch, onMounted, onBeforeUnmount } from 'vue'
+import { Icon } from '@iconify/vue'
+import LearnView from './components/LearnView.vue'
+import OverviewView from './components/OverviewView.vue'
+import {
+  baseHiragana, baseKatakana,
+  extraHiragana, extraKatakana,
+  yoonHiragana, yoonKatakana,
+  makeItems
+} from './kana.js'
 
 /** -----------------------------
  * View (Tabs)
  * ---------------------------- */
 const view = ref('quiz')
+const blockFocusIds = ref(null)
+const blockLabel = ref('')
 
-/** -----------------------------
- * Datenbasis (Gojūon + Extras)
- * ---------------------------- */
-const baseHiragana = [
-  ['あ','a'], ['い','i'], ['う','u'], ['え','e'], ['お','o'],
-  ['か','ka'], ['き','ki'], ['く','ku'], ['け','ke'], ['こ','ko'],
-  ['さ','sa'], ['し','shi'], ['す','su'], ['せ','se'], ['そ','so'],
-  ['た','ta'], ['ち','chi'], ['つ','tsu'], ['て','te'], ['と','to'],
-  ['な','na'], ['に','ni'], ['ぬ','nu'], ['ね','ne'], ['の','no'],
-  ['は','ha'], ['ひ','hi'], ['ふ','fu'], ['へ','he'], ['ほ','ho'],
-  ['ま','ma'], ['み','mi'], ['む','mu'], ['め','me'], ['も','mo'],
-  ['や','ya'], ['ゆ','yu'], ['よ','yo'],
-  ['ら','ra'], ['り','ri'], ['る','ru'], ['れ','re'], ['ろ','ro'],
-  ['わ','wa'], ['を','wo'],
-  ['ん','n']
-]
 
-const baseKatakana = [
-  ['ア','a'], ['イ','i'], ['ウ','u'], ['エ','e'], ['オ','o'],
-  ['カ','ka'], ['キ','ki'], ['ク','ku'], ['ケ','ke'], ['コ','ko'],
-  ['サ','sa'], ['シ','shi'], ['ス','su'], ['セ','se'], ['ソ','so'],
-  ['タ','ta'], ['チ','chi'], ['ツ','tsu'], ['テ','te'], ['ト','to'],
-  ['ナ','na'], ['ニ','ni'], ['ヌ','nu'], ['ネ','ne'], ['ノ','no'],
-  ['ハ','ha'], ['ヒ','hi'], ['フ','fu'], ['ヘ','he'], ['ホ','ho'],
-  ['マ','ma'], ['ミ','mi'], ['ム','mu'], ['メ','me'], ['モ','mo'],
-  ['ヤ','ya'], ['ユ','yu'], ['ヨ','yo'],
-  ['ラ','ra'], ['リ','ri'], ['ル','ru'], ['レ','re'], ['ロ','ro'],
-  ['ワ','wa'], ['ヲ','wo'],
-  ['ン','n']
-]
-
-const extraHiragana = [
-  ['が','ga'], ['ぎ','gi'], ['ぐ','gu'], ['げ','ge'], ['ご','go'],
-  ['ざ','za'], ['じ','ji'], ['ず','zu'], ['ぜ','ze'], ['ぞ','zo'],
-  ['だ','da'], ['ぢ','ji'], ['づ','zu'], ['で','de'], ['ど','do'],
-  ['ば','ba'], ['び','bi'], ['ぶ','bu'], ['べ','be'], ['ぼ','bo'],
-  ['ぱ','pa'], ['ぴ','pi'], ['ぷ','pu'], ['ぺ','pe'], ['ぽ','po']
-]
-
-const extraKatakana = [
-  ['ガ','ga'], ['ギ','gi'], ['グ','gu'], ['ゲ','ge'], ['ゴ','go'],
-  ['ザ','za'], ['ジ','ji'], ['ズ','zu'], ['ゼ','ze'], ['ゾ','zo'],
-  ['ダ','da'], ['ヂ','ji'], ['ヅ','zu'], ['デ','de'], ['ド','do'],
-  ['バ','ba'], ['ビ','bi'], ['ブ','bu'], ['ベ','be'], ['ボ','bo'],
-  ['パ','pa'], ['ピ','pi'], ['プ','pu'], ['ペ','pe'], ['ポ','po']
-]
-
-const yoonHiragana = [
-  ['きゃ','kya'], ['きゅ','kyu'], ['きょ','kyo'],
-  ['ぎゃ','gya'], ['ぎゅ','gyu'], ['ぎょ','gyo'],
-  ['しゃ','sha'], ['しゅ','shu'], ['しょ','sho'],
-  ['じゃ','ja'], ['じゅ','ju'], ['じょ','jo'],
-  ['ちゃ','cha'], ['ちゅ','chu'], ['ちょ','cho'],
-  ['にゃ','nya'], ['にゅ','nyu'], ['にょ','nyo'],
-  ['ひゃ','hya'], ['ひゅ','hyu'], ['ひょ','hyo'],
-  ['びゃ','bya'], ['びゅ','byu'], ['びょ','byo'],
-  ['ぴゃ','pya'], ['ぴゅ','pyu'], ['ぴょ','pyo'],
-  ['みゃ','mya'], ['みゅ','myu'], ['みょ','myo'],
-  ['りゃ','rya'], ['りゅ','ryu'], ['りょ','ryo']
-]
-
-const yoonKatakana = [
-  ['キャ','kya'], ['キュ','kyu'], ['キョ','kyo'],
-  ['ギャ','gya'], ['ギュ','gyu'], ['ギョ','gyo'],
-  ['シャ','sha'], ['シュ','shu'], ['ショ','sho'],
-  ['ジャ','ja'], ['ジュ','ju'], ['ジョ','jo'],
-  ['チャ','cha'], ['チュ','chu'], ['チョ','cho'],
-  ['ニャ','nya'], ['ニュ','nyu'], ['ニョ','nyo'],
-  ['ヒャ','hya'], ['ヒュ','hyu'], ['ヒョ','hyo'],
-  ['ビャ','bya'], ['ビュ','byu'], ['ビョ','byo'],
-  ['ピャ','pya'], ['ピュ','pyu'], ['ピョ','pyo'],
-  ['ミャ','mya'], ['ミュ','myu'], ['ミョ','myo'],
-  ['リャ','rya'], ['リュ','ryu'], ['リョ','ryo']
-]
-
-const makeItems = (arr, script, group) =>
-  arr.map(([kana, romaji], idx) => ({
-    id: `${script}-${group}-${idx}-${kana}`,
-    kana, romaji, script, group,
-    correct: 0, wrong: 0, streak: 0, weight: 1
-  }))
 
 const allItems = reactive([
   ...makeItems(baseHiragana, 'hiragana', 'base'),
@@ -325,6 +260,9 @@ const activeBaseKata = computed(() => kataBase.value.slice(0, kataUnlocked.value
 const activeExtras = computed(() => extraItems.value.slice(0, extrasUnlocked.value))
 
 const activePool = computed(() => {
+  if (blockFocusIds.value) {
+    return allItems.filter(i => blockFocusIds.value.has(i.id))
+  }
   let pool = []
   if (mode.value === 'hiragana') pool = activeBaseHira.value
   else if (mode.value === 'katakana') pool = activeBaseKata.value
@@ -352,11 +290,11 @@ const extraProgress = computed(() =>
 const badges = computed(() => {
   const totalCorrect = allItems.reduce((s, i) => s + i.correct, 0)
   return [
-    { id: 'b1', icon: '🌱', title: 'Erster Treffer', unlocked: totalCorrect >= 1 },
-    { id: 'b2', icon: '🔥', title: '10 richtig', unlocked: totalCorrect >= 10 },
-    { id: 'b3', icon: '💯', title: '50 richtig', unlocked: totalCorrect >= 50 },
-    { id: 'b4', icon: '🏁', title: 'Basis gemeistert', unlocked: baseMastered.value },
-    { id: 'b5', icon: '✨', title: 'Extras gestartet', unlocked: extraMastered.value >= 1 }
+    { id: 'b1', icon: 'carbon:sprout', title: 'Erster Treffer', unlocked: totalCorrect >= 1 },
+    { id: 'b2', icon: 'carbon:fire', title: '10 richtig', unlocked: totalCorrect >= 10 },
+    { id: 'b3', icon: 'carbon:certificate', title: '50 richtig', unlocked: totalCorrect >= 50 },
+    { id: 'b4', icon: 'carbon:trophy', title: 'Basis gemeistert', unlocked: baseMastered.value },
+    { id: 'b5', icon: 'carbon:star-filled', title: 'Extras gestartet', unlocked: extraMastered.value >= 1 }
   ]
 })
 
@@ -383,10 +321,13 @@ function weightedPick(pool) {
 }
 
 function sampleOptions(correctItem, count = 8) {
-  const pool = activePool.value.filter(i => i.id !== correctItem.id)
+  // In block mode use the full script as distractor pool so we always get 8 options
+  const distractorPool = blockFocusIds.value
+    ? allItems.filter(i => i.id !== correctItem.id && i.script === correctItem.script)
+    : activePool.value.filter(i => i.id !== correctItem.id)
   const picked = new Set()
-  while (picked.size < count - 1 && pool.length) {
-    const it = pool[Math.floor(Math.random() * pool.length)]
+  while (picked.size < count - 1 && distractorPool.length > picked.size) {
+    const it = distractorPool[Math.floor(Math.random() * distractorPool.length)]
     picked.add(it)
   }
   const arr = [correctItem, ...picked]
@@ -446,6 +387,22 @@ function submit(opt) {
     current.value.weight = Math.min(10, current.value.weight * 2)
     startCountdown(3)
   }
+}
+
+/** -----------------------------
+ * Block-Modus (aus Lernen-Tab)
+ * ---------------------------- */
+function handlePracticeBlock(items, label) {
+  blockFocusIds.value = new Set(items.map(i => i.id))
+  blockLabel.value = label
+  view.value = 'quiz'
+  next()
+}
+
+function clearBlockMode() {
+  blockFocusIds.value = null
+  blockLabel.value = ''
+  next()
 }
 
 /** -----------------------------

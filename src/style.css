@@ -11,54 +11,57 @@ body {
 .app {
   max-width: 920px;
   margin: 0 auto;
-  padding: 24px;
+  padding: 24px 24px 80px;
   color: #111;
 }
 
-.app__header {
+/* ---- Bottom Navigation ---- */
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
   display: flex;
-  flex-direction: column;
-  gap: 16px;
-  margin-bottom: 24px;
-}
-
-.app__title {
-  margin: 0;
-  font-size: 28px;
-}
-
-/* ---- Controls Panel (below quiz) ---- */
-.app__controls-panel {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  margin-top: 40px;
-  padding-top: 24px;
+  justify-content: space-around;
+  align-items: center;
+  height: 60px;
+  padding-bottom: env(safe-area-inset-bottom);
+  background: #fff;
   border-top: 1px solid #e0e0e0;
+  z-index: 100;
 }
 
-/* ---- Tabs ---- */
-.tabs {
+.bottom-nav__btn {
   display: flex;
-  gap: 8px;
-}
-
-.tabs__btn {
-  padding: 8px 12px;
-  border-radius: 8px;
-  border: 1px solid #ddd;
-  background: #f6f6f6;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 44px;
+  border: none;
+  background: transparent;
   cursor: pointer;
-  font-size: 14px;
+  color: #aaa;
+  font-size: 24px;
+  border-radius: 8px;
+  transition: color 0.15s;
 }
 
-.tabs__btn--active {
-  background: #111;
-  color: #fff;
-  border-color: #111;
+.bottom-nav__btn:hover {
+  color: #555;
+}
+
+.bottom-nav__btn--active {
+  color: #111;
 }
 
 /* ---- Controls ---- */
+.quiz__settings {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 44px;
+}
+
 .app__controls {
   display: flex;
   justify-content: space-between;
@@ -151,11 +154,19 @@ body {
 }
 
 .badges__item {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
   background: #f5f5f5;
   padding: 6px 10px;
   border-radius: 999px;
   font-size: 12px;
   opacity: 0.4;
+}
+
+.badges__icon {
+  font-size: 14px;
+  flex-shrink: 0;
 }
 
 .badges__item--on {
@@ -183,11 +194,14 @@ body {
   border: 1px solid #eee;
   border-radius: 12px;
   padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 0;
 }
 
 .quiz__prompt {
   text-align: center;
-  margin-bottom: 16px;
 }
 
 .quiz__kana {
@@ -230,7 +244,6 @@ body {
 }
 
 .quiz__feedback {
-  margin-top: 16px;
   text-align: center;
 }
 
@@ -285,9 +298,6 @@ body {
 /* ---- Stats ---- */
 .stats {
   margin-top: 12px;
-  border: 1px solid #eee;
-  border-radius: 12px;
-  padding: 16px;
 }
 
 .stats__title {
@@ -300,46 +310,432 @@ body {
   font-size: 13px;
 }
 
-.stats__scroll {
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-}
-
-.stats__table {
-  display: grid;
-  gap: 6px;
-  min-width: 480px;
-}
-
-.stats__row {
-  display: grid;
-  grid-template-columns: 60px 70px 90px 60px 60px 60px;
+.stats__list {
+  display: flex;
+  flex-direction: column;
   gap: 8px;
-  align-items: center;
-  font-size: 13px;
-  padding: 6px 0;
-  border-bottom: 1px dashed #eee;
 }
 
-.stats__row--head {
-  font-weight: 600;
-  color: #555;
+.stats__card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border: 1px solid #eee;
+  border-radius: 10px;
+  background: #fafafa;
+}
+
+.stats__card-left {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  flex-shrink: 0;
+  min-width: 68px;
 }
 
 .stats__kana {
-  font-size: 20px;
+  font-size: 26px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.stats__romaji {
+  font-size: 13px;
+  color: #555;
+}
+
+.stats__script-tag {
+  font-size: 11px;
+  color: #888;
+  background: #f0f0f0;
+  padding: 2px 6px;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+.stats__card-right {
+  display: flex;
+  gap: 6px;
+  margin-left: auto;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.stats__pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.stats__pill--wrong {
+  background: #f0f0f0;
+  color: #444;
+}
+
+.stats__pill--correct {
+  background: #f0f0f0;
+  color: #444;
+}
+
+.stats__pill--streak {
+  background: #f0f0f0;
+  color: #444;
 }
 
 .stats__empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
   padding: 10px 0;
   color: #777;
   text-align: center;
 }
 
-/* ---- Footer ---- */
-.app__footer {
-  margin-top: 16px;
-  color: #777;
+.stats__empty-icon {
+  font-size: 18px;
+  color: #1b8f2b;
+}
+
+/* ========================================
+   Block-Modus Banner
+   ======================================== */
+.block-mode-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  background: #fff8e1;
+  border: 1px solid #ffe082;
+  border-radius: 8px;
+  padding: 10px 14px;
+  margin-bottom: 16px;
+  font-size: 14px;
+  flex-wrap: wrap;
+}
+
+.block-mode-banner__label {
+  font-weight: 600;
+  color: #5a3e00;
+}
+
+.block-mode-banner__exit {
+  background: none;
+  border: 1px solid #bba040;
+  border-radius: 6px;
+  color: #5a3e00;
+  cursor: pointer;
+  font-size: 13px;
+  padding: 4px 10px;
+  white-space: nowrap;
+}
+
+.block-mode-banner__exit:hover {
+  background: #ffe082;
+}
+
+/* ========================================
+   Lernen-Reiter (LearnView)
+   ======================================== */
+.learn-view {
+  margin-top: 4px;
+}
+
+.learn {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.learn__controls {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.learn__toggle-group {
+  display: flex;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.learn__toggle {
+  padding: 7px 14px;
+  border: none;
+  background: #f6f6f6;
+  cursor: pointer;
+  font-size: 13px;
+  font-family: inherit;
+  color: #333;
+  transition: background 0.15s;
+}
+
+.learn__toggle + .learn__toggle {
+  border-left: 1px solid #ddd;
+}
+
+.learn__toggle--active {
+  background: #111;
+  color: #fff;
+}
+
+.learn__section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.learn__section-title {
+  margin: 0 0 4px;
+  font-size: 15px;
+  color: #444;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 6px;
+}
+
+.learn-row {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.learn-row__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.learn-row__label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+}
+
+.learn-row__practice-btn {
+  padding: 5px 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  background: #fff;
+  cursor: pointer;
   font-size: 12px;
+  color: #444;
+  white-space: nowrap;
+  transition: background 0.15s;
+}
+
+.learn-row__practice-btn:hover {
+  background: #111;
+  color: #fff;
+  border-color: #111;
+}
+
+.learn-row__grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+}
+
+/* ---- Flip Cards ---- */
+.card {
+  width: 240px;
+  height: 240px;
+  perspective: 800px;
+  cursor: pointer;
+  user-select: none;
+  flex-shrink: 0;
+}
+
+.card__inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.35s ease;
+}
+
+.card--flipped .card__inner {
+  transform: rotateY(180deg);
+}
+
+.card__front,
+.card__back {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 14px;
+  border: 1px solid #ddd;
+}
+
+.card__front {
+  background: #fff;
+  font-size: 90px;
+  font-weight: 700;
+  box-shadow: 0 2px 8px rgba(0,0,0,.08);
+}
+
+.card__back {
+  background: #111;
+  color: #fff;
+  font-size: 40px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  transform: rotateY(180deg);
+  box-shadow: 0 2px 8px rgba(0,0,0,.25);
+}
+
+@media (max-width: 600px) {
+  .card {
+    width: 140px;
+    height: 140px;
+  }
+
+  .card__front {
+    font-size: 56px;
+  }
+
+  .card__back {
+    font-size: 26px;
+  }
+}
+
+/* ========================================
+   Übersichts-Reiter (OverviewView)
+   ======================================== */
+.overview {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding-top: 4px;
+}
+
+.overview__controls {
+  display: flex;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+  align-self: flex-start;
+}
+
+.overview__section-title {
+  margin: 0 0 8px;
+  font-size: 15px;
+  color: #444;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 6px;
+}
+
+/* Gojūon 6-column grid (header col + 5 vowel cols) */
+.overview-table {
+  display: grid;
+  grid-template-columns: 32px repeat(5, 1fr);
+  gap: 4px;
+  max-width: 540px;
+}
+
+.overview-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 4px;
+  border-radius: 6px;
+  border: 1px solid #eee;
+  background: #fff;
+  min-height: 60px;
   text-align: center;
+}
+
+.overview-cell--header {
+  background: #f5f5f5;
+  border-color: #e0e0e0;
+  font-size: 11px;
+  font-weight: 600;
+  color: #555;
+  min-height: 36px;
+}
+
+.overview-cell--row-header {
+  background: #f5f5f5;
+  border-color: #e0e0e0;
+  font-size: 11px;
+  font-weight: 600;
+  color: #555;
+  min-height: 60px;
+}
+
+.overview-cell--empty {
+  background: #fafafa;
+  border-color: #f0f0f0;
+}
+
+.overview-cell__kana {
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.overview-cell__romaji {
+  font-size: 10px;
+  color: #666;
+  margin-top: 2px;
+}
+
+/* Dakuten / Yoon grid – smaller cells */
+.overview-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  max-width: 540px;
+}
+
+.overview-mini-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  min-height: 56px;
+  border: 1px solid #eee;
+  border-radius: 6px;
+  background: #fff;
+  text-align: center;
+  padding: 6px 2px;
+}
+
+.overview-mini-cell .overview-cell__kana {
+  font-size: 20px;
+}
+
+@media (max-width: 540px) {
+  .overview-table {
+    grid-template-columns: 28px repeat(5, 1fr);
+    gap: 3px;
+  }
+
+  .overview-cell {
+    padding: 6px 2px;
+    min-height: 52px;
+  }
+
+  .overview-cell__kana {
+    font-size: 18px;
+  }
+
+  .overview-mini-cell {
+    width: 56px;
+    min-height: 50px;
+  }
 }
