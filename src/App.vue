@@ -16,6 +16,10 @@
             v-for="opt in options"
             :key="opt.id"
             class="quiz__option"
+            :class="{
+              'quiz__option--correct': answered && opt.id === current?.id,
+              'quiz__option--wrong': answered && selectedOpt?.id === opt.id && opt.id !== current?.id
+            }"
             :disabled="answered"
             @click="submit(opt)"
           >
@@ -199,6 +203,7 @@ const answered = ref(false)
 const isCorrect = ref(false)
 const current = ref(null)
 const options = ref([])
+const selectedOpt = ref(null)
 
 /** -----------------------------
  * Freischaltung (8er-Pakete)
@@ -366,6 +371,7 @@ function next() {
   clearTimers()
   answered.value = false
   isCorrect.value = false
+  selectedOpt.value = null
   current.value = weightedPick(activePool.value)
   options.value = sampleOptions(current.value, 8)
 }
@@ -374,6 +380,7 @@ function submit(opt) {
   if (answered.value) return
   const correct = opt.id === current.value.id
   isCorrect.value = correct
+  selectedOpt.value = opt
   answered.value = true
 
   if (correct) {

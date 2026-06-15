@@ -11,7 +11,7 @@ body {
 .app {
   max-width: 920px;
   margin: 0 auto;
-  padding: 24px 24px 80px;
+  padding: 24px 24px calc(80px + env(safe-area-inset-bottom));
   color: #111;
 }
 
@@ -24,7 +24,7 @@ body {
   display: flex;
   justify-content: space-around;
   align-items: center;
-  height: 60px;
+  height: calc(60px + env(safe-area-inset-bottom));
   padding-bottom: env(safe-area-inset-bottom);
   background: #fff;
   border-top: 1px solid #e0e0e0;
@@ -241,6 +241,22 @@ body {
 .quiz__option:disabled {
   opacity: 0.6;
   cursor: default;
+}
+
+.quiz__option--correct,
+.quiz__option--correct:disabled {
+  background: #d4edda;
+  border-color: #1b8f2b;
+  color: #155724;
+  opacity: 1;
+}
+
+.quiz__option--wrong,
+.quiz__option--wrong:disabled {
+  background: #f8d7da;
+  border-color: #b00020;
+  color: #721c24;
+  opacity: 1;
 }
 
 .quiz__feedback {
