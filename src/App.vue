@@ -437,12 +437,12 @@ function submit(opt) {
     current.value.correct++
     current.value.streak++
     current.value.weight = Math.max(0.3, current.value.weight * 0.7)
-    startCountdown(4)
+    startCountdown(2)
   } else {
     current.value.wrong++
     current.value.streak = 0
     current.value.weight = Math.min(10, current.value.weight * 2)
-    startCountdown(5)
+    startCountdown(3)
   }
 }
 
