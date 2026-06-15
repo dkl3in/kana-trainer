@@ -286,15 +286,21 @@ body {
   font-size: 13px;
 }
 
+.stats__scroll {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
 .stats__table {
   display: grid;
   gap: 6px;
+  min-width: 480px;
 }
 
 .stats__row {
   display: grid;
-  grid-template-columns: 80px 80px 100px 70px 70px 70px;
-  gap: 10px;
+  grid-template-columns: 60px 70px 90px 60px 60px 60px;
+  gap: 8px;
   align-items: center;
   font-size: 13px;
   padding: 6px 0;

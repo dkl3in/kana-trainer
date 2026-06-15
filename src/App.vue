@@ -46,27 +46,29 @@
       <h2 class="stats__title">Statistik</h2>
       <p class="stats__subtitle">Zeichen mit Fehlern (absteigend)</p>
 
-      <div class="stats__table">
-        <div class="stats__row stats__row--head">
-          <div>Zeichen</div>
-          <div>Romaji</div>
-          <div>Script</div>
-          <div>Falsch</div>
-          <div>Richtig</div>
-          <div>Streak</div>
-        </div>
+      <div class="stats__scroll">
+        <div class="stats__table">
+          <div class="stats__row stats__row--head">
+            <div>Zeichen</div>
+            <div>Romaji</div>
+            <div>Script</div>
+            <div>Falsch</div>
+            <div>Richtig</div>
+            <div>Streak</div>
+          </div>
 
-        <div v-for="item in wrongList" :key="item.id" class="stats__row">
-          <div class="stats__kana">{{ item.kana }}</div>
-          <div>{{ item.romaji }}</div>
-          <div>{{ item.script }}</div>
-          <div>{{ item.wrong }}</div>
-          <div>{{ item.correct }}</div>
-          <div>{{ item.streak }}</div>
-        </div>
+          <div v-for="item in wrongList" :key="item.id" class="stats__row">
+            <div class="stats__kana">{{ item.kana }}</div>
+            <div>{{ item.romaji }}</div>
+            <div>{{ item.script }}</div>
+            <div>{{ item.wrong }}</div>
+            <div>{{ item.correct }}</div>
+            <div>{{ item.streak }}</div>
+          </div>
 
-        <div v-if="wrongList.length === 0" class="stats__empty">
-          Noch keine Fehler 🎉
+          <div v-if="wrongList.length === 0" class="stats__empty">
+            Noch keine Fehler 🎉
+          </div>
         </div>
       </div>
     </section>
