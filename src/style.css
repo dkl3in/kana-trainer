@@ -1,0 +1,313 @@
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+}
+
+/* ---- App Layout ---- */
+.app {
+  max-width: 920px;
+  margin: 0 auto;
+  padding: 24px;
+  color: #111;
+}
+
+.app__header {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.app__title {
+  margin: 0;
+  font-size: 28px;
+}
+
+/* ---- Tabs ---- */
+.tabs {
+  display: flex;
+  gap: 8px;
+}
+
+.tabs__btn {
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  background: #f6f6f6;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.tabs__btn--active {
+  background: #111;
+  color: #fff;
+  border-color: #111;
+}
+
+/* ---- Controls ---- */
+.app__controls {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.app__control {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.app__select {
+  padding: 6px 8px;
+}
+
+.app__status {
+  display: flex;
+  gap: 16px;
+  font-size: 14px;
+  color: #555;
+  flex-wrap: wrap;
+}
+
+/* ---- Progress ---- */
+.progress {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 16px;
+}
+
+.progress__block {
+  border: 1px solid #eee;
+  padding: 12px;
+  border-radius: 10px;
+}
+
+.progress__label {
+  font-size: 13px;
+  color: #666;
+  margin-bottom: 8px;
+}
+
+.progress__bar {
+  background: #f1f1f1;
+  height: 10px;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.progress__fill {
+  height: 100%;
+  background: #222;
+  transition: width 0.2s ease;
+}
+
+.progress__fill--accent {
+  background: #ff7a59;
+}
+
+.progress__fill--gold {
+  background: #ffb300;
+}
+
+.progress__text {
+  margin-top: 6px;
+  font-size: 12px;
+  color: #777;
+}
+
+/* ---- Badges ---- */
+.badges {
+  border: 1px dashed #ddd;
+  padding: 12px;
+  border-radius: 10px;
+}
+
+.badges__title {
+  font-size: 13px;
+  color: #666;
+  margin-bottom: 8px;
+}
+
+.badges__list {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.badges__item {
+  background: #f5f5f5;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  opacity: 0.4;
+}
+
+.badges__item--on {
+  opacity: 1;
+  background: #111;
+  color: #fff;
+}
+
+/* ---- Actions ---- */
+.app__actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.app__reset {
+  padding: 6px 10px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  background: #fff;
+  cursor: pointer;
+}
+
+/* ---- Quiz ---- */
+.quiz {
+  border: 1px solid #eee;
+  border-radius: 12px;
+  padding: 20px;
+}
+
+.quiz__prompt {
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+.quiz__kana {
+  font-size: 64px;
+  font-weight: 700;
+}
+
+.quiz__options {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+
+.quiz__option {
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background: #fafafa;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.quiz__option:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.quiz__feedback {
+  margin-top: 16px;
+  text-align: center;
+}
+
+.quiz__message {
+  font-size: 18px;
+  margin-bottom: 8px;
+}
+
+.quiz__message--correct {
+  color: #1b8f2b;
+}
+
+.quiz__message--wrong {
+  color: #b00020;
+}
+
+.quiz__countdown {
+  margin: 6px 0 8px;
+  font-size: 14px;
+  color: #666;
+}
+
+.quiz__countdown-num {
+  display: inline-block;
+  font-weight: 600;
+  color: #111;
+  animation: pulse 1s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%   { opacity: 0.6; transform: scale(1); }
+  50%  { opacity: 1;   transform: scale(1.04); }
+  100% { opacity: 0.6; transform: scale(1); }
+}
+
+.quiz__next-link {
+  background: none;
+  border: none;
+  color: #555;
+  text-decoration: underline;
+  cursor: pointer;
+  font-size: 14px;
+  padding: 0;
+}
+
+.quiz__next-link:hover {
+  color: #111;
+}
+
+/* ---- Stats ---- */
+.stats {
+  margin-top: 12px;
+  border: 1px solid #eee;
+  border-radius: 12px;
+  padding: 16px;
+}
+
+.stats__title {
+  margin: 0 0 6px;
+}
+
+.stats__subtitle {
+  margin: 0 0 12px;
+  color: #666;
+  font-size: 13px;
+}
+
+.stats__table {
+  display: grid;
+  gap: 6px;
+}
+
+.stats__row {
+  display: grid;
+  grid-template-columns: 80px 80px 100px 70px 70px 70px;
+  gap: 10px;
+  align-items: center;
+  font-size: 13px;
+  padding: 6px 0;
+  border-bottom: 1px dashed #eee;
+}
+
+.stats__row--head {
+  font-weight: 600;
+  color: #555;
+}
+
+.stats__kana {
+  font-size: 20px;
+}
+
+.stats__empty {
+  padding: 10px 0;
+  color: #777;
+  text-align: center;
+}
+
+/* ---- Footer ---- */
+.app__footer {
+  margin-top: 16px;
+  color: #777;
+  font-size: 12px;
+  text-align: center;
+}
