@@ -339,9 +339,10 @@ function weightedPick(pool) {
 }
 
 function sampleOptions(correctItem, count = 8) {
-  // In block mode use the full script as distractor pool so we always get 8 options
+  // In block mode restrict distractors to the same group (base/extra/yoon) so
+  // e.g. practising a base-row never shows yoon options like "myu" or "pya".
   const distractorPool = blockFocusIds.value
-    ? allItems.filter(i => i.id !== correctItem.id && i.script === correctItem.script)
+    ? allItems.filter(i => i.id !== correctItem.id && i.script === correctItem.script && i.group === correctItem.group)
     : activePool.value.filter(i => i.id !== correctItem.id)
   const picked = new Set()
   while (picked.size < count - 1 && distractorPool.length > picked.size) {
