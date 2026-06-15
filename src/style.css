@@ -597,7 +597,7 @@ body {
 
 .card__front {
   background: #fff;
-  font-size: 90px;
+  font-size: 64px;
   font-weight: 700;
   box-shadow: 0 2px 8px rgba(0,0,0,.08);
 }
@@ -605,7 +605,7 @@ body {
 .card__back {
   background: #111;
   color: #fff;
-  font-size: 40px;
+  font-size: 64px;
   font-weight: 600;
   letter-spacing: 0.02em;
   transform: rotateY(180deg);
@@ -619,11 +619,11 @@ body {
   }
 
   .card__front {
-    font-size: 56px;
+    font-size: 40px;
   }
 
   .card__back {
-    font-size: 26px;
+    font-size: 40px;
   }
 }
 
