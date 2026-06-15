@@ -137,12 +137,12 @@
       </div>
     </section>
 
-    <!-- LERNEN -->
+    <!-- LEARN -->
     <section class="learn-view" v-if="view === 'learn'">
       <LearnView :allItems="allItems" @practiceBlock="handlePracticeBlock" />
     </section>
 
-    <!-- ÜBERSICHT -->
+    <!-- OVERVIEW -->
     <section v-if="view === 'overview'">
       <OverviewView />
     </section>
@@ -468,7 +468,7 @@ function resetProgress() {
 watch(allItems, saveProgress, { deep: true })
 watch(mode, () => {
   saveProgress()
-  next() // sofort neue Frage beim Mode-Wechsel
+  next() // immediately load new question on mode change
 }, { flush: 'sync' })
 
 onMounted(() => {

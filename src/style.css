@@ -419,7 +419,7 @@ body {
 }
 
 /* ========================================
-   Block-Modus Banner
+   Block Mode Banner
    ======================================== */
 .block-mode-banner {
   display: flex;
@@ -456,7 +456,7 @@ body {
 }
 
 /* ========================================
-   Lernen-Reiter (LearnView)
+   Learn Tab (LearnView)
    ======================================== */
 .learn-view {
   margin-top: 4px;
@@ -628,7 +628,7 @@ body {
 }
 
 /* ========================================
-   Übersichts-Reiter (OverviewView)
+   Overview Tab (OverviewView)
    ======================================== */
 .overview {
   display: flex;
@@ -754,4 +754,96 @@ body {
     width: 56px;
     min-height: 50px;
   }
+}
+
+/* ========================================
+   Overview – clickable cells
+   ======================================== */
+.overview-cell--clickable {
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.overview-cell--clickable:hover {
+  background: #f0f0f0;
+  border-color: #bbb;
+}
+
+/* ========================================
+   Zoom-Modal (OverviewView)
+   ======================================== */
+.zoom-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: rgba(0, 0, 0, 0.65);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  animation: zoom-fade-in 0.18s ease;
+}
+
+@keyframes zoom-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.zoom-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 40px;
+  height: 40px;
+  border: none;
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+  font-size: 20px;
+  line-height: 1;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s;
+}
+
+.zoom-close:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.zoom-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 220px;
+  height: 220px;
+  background: #111;
+  border-radius: 16px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+  user-select: none;
+  gap: 12px;
+}
+
+.zoom-card__kana {
+  color: #fff;
+  font-size: 88px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.zoom-card__romaji {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 22px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+}
+
+.zoom-hint {
+  color: rgba(255, 255, 255, 0.65);
+  font-size: 13px;
+  margin: 0;
+  pointer-events: none;
 }
