@@ -1,3 +1,17 @@
+:root {
+  --color-primary: #111;
+  --color-accent-kata: #ff7a59;
+  --color-accent-gold: #ffb300;
+  --color-accent-kanji: #4a90d9;
+  --color-bg: #fff;
+  --color-bg-alt: #fafafa;
+  --color-error: #b00020;
+  --color-error-light: #e53e3e;
+  --color-success: #1b8f2b;
+  --color-border: #ddd;
+  --color-muted: #666;
+}
+
 *, *::before, *::after {
   box-sizing: border-box;
 }
@@ -94,7 +108,7 @@ body {
 
 .mode-tabs__mastery {
   font-size: 10px;
-  color: #1b8f2b;
+  color: var(--color-success);
   vertical-align: super;
   margin-left: 1px;
   line-height: 0;
@@ -141,11 +155,11 @@ body {
 }
 
 .progress__fill--accent {
-  background: #ff7a59;
+  background: var(--color-accent-kata);
 }
 
 .progress__fill--gold {
-  background: #ffb300;
+  background: var(--color-accent-gold);
 }
 
 .progress__text {
@@ -236,7 +250,7 @@ body {
 
 .reset-dialog__icon {
   font-size: 36px;
-  color: #e53e3e;
+  color: var(--color-error-light);
   text-align: center;
 }
 
@@ -279,7 +293,7 @@ body {
   padding: 10px;
   border-radius: 10px;
   border: none;
-  background: #e53e3e;
+  background: var(--color-error-light);
   color: #fff;
   font-size: 14px;
   font-weight: 600;
@@ -287,7 +301,7 @@ body {
 }
 
 .reset-dialog__confirm:hover {
-  background: #c53030;
+  background: #9b1f1f;
 }
 
 /* ---- Quiz ---- */
@@ -348,7 +362,7 @@ body {
 .quiz__option--correct,
 .quiz__option--correct:disabled {
   background: #d4edda;
-  border-color: #1b8f2b;
+  border-color: var(--color-success);
   color: #155724;
   opacity: 1;
 }
@@ -356,7 +370,7 @@ body {
 .quiz__option--wrong,
 .quiz__option--wrong:disabled {
   background: #f8d7da;
-  border-color: #b00020;
+  border-color: var(--color-error);
   color: #721c24;
   opacity: 1;
 }
@@ -371,11 +385,11 @@ body {
 }
 
 .quiz__message--correct {
-  color: #1b8f2b;
+  color: var(--color-success);
 }
 
 .quiz__message--wrong {
-  color: #b00020;
+  color: var(--color-error);
 }
 
 .quiz__countdown {
@@ -414,7 +428,7 @@ body {
 }
 
 .quiz__mastery-msg {
-  color: #1b8f2b;
+  color: var(--color-success);
   font-weight: 600;
   font-size: 15px;
   margin: 4px 0 0;
@@ -613,7 +627,7 @@ body {
 
 .stats__empty-icon {
   font-size: 18px;
-  color: #1b8f2b;
+  color: var(--color-success);
 }
 
 /* ========================================
@@ -1043,3 +1057,257 @@ body {
   margin: 0;
   pointer-events: none;
 }
+
+/* ========================================
+   Home View
+   ======================================== */
+.home {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 32px;
+  padding: 24px 0;
+  min-height: calc(100vh - 80px);
+}
+
+.home__title {
+  font-size: 22px;
+  font-weight: 700;
+  margin: 0;
+  text-align: center;
+}
+
+.home__cards {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  max-width: 420px;
+}
+
+.home__card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 28px 24px 20px;
+  border-radius: 16px;
+  border: 2px solid #e0e0e0;
+  background: #fff;
+  cursor: pointer;
+  transition: border-color 0.15s, box-shadow 0.15s, transform 0.1s;
+  text-align: center;
+  width: 100%;
+}
+
+.home__card:hover {
+  box-shadow: 0 4px 16px rgba(0,0,0,.1);
+  transform: translateY(-2px);
+}
+
+.home__card--kana {
+  border-color: #bbb;
+}
+
+.home__card--kana:hover {
+  border-color: #111;
+}
+
+.home__card--kanji {
+  border-color: var(--color-accent-kanji);
+}
+
+.home__card--kanji:hover {
+  border-color: #2970c0;
+  box-shadow: 0 4px 16px rgba(74,144,217,.2);
+}
+
+.home__card-icon {
+  font-size: 48px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.home__card-icon--kanji {
+  color: var(--color-accent-kanji);
+}
+
+.home__card-label {
+  font-size: 20px;
+  font-weight: 700;
+  color: #111;
+}
+
+.home__card-desc {
+  font-size: 14px;
+  color: #666;
+}
+
+.home__card-progress {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  margin-top: 4px;
+}
+
+.home__progress-bar {
+  flex: 1;
+  height: 8px;
+  background: #f0f0f0;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.home__progress-fill {
+  height: 100%;
+  border-radius: 999px;
+  transition: width 0.3s ease;
+}
+
+.home__progress-fill--kana {
+  background: #111;
+}
+
+.home__progress-fill--kanji {
+  background: var(--color-accent-kanji);
+}
+
+.home__progress-text {
+  font-size: 12px;
+  color: #777;
+  white-space: nowrap;
+}
+
+/* ========================================
+   Kanji Cards (in LearnView)
+   ======================================== */
+.card--kanji .card__front {
+  font-size: 80px;
+}
+
+.card--kanji .card__back {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 12px 8px;
+  font-size: 18px;
+}
+
+.card__meaning {
+  font-size: 22px;
+  font-weight: 700;
+  color: #fff;
+  text-align: center;
+}
+
+.card__kanji-large {
+  font-size: 64px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.card__reading-row {
+  font-size: 13px;
+  color: rgba(255,255,255,0.85);
+  text-align: center;
+}
+
+.card__reading-label {
+  font-size: 11px;
+  opacity: 0.7;
+  margin-right: 3px;
+}
+
+.card__example {
+  font-size: 14px;
+  color: rgba(255,255,255,0.75);
+  margin-top: 2px;
+}
+
+/* ========================================
+   Kanji Quiz — larger prompt
+   ======================================== */
+.quiz__kana--kanji {
+  font-size: 96px;
+}
+
+/* ========================================
+   Kanji Overview — cells
+   ======================================== */
+.overview-mini-cell--kanji .overview-cell__kana {
+  font-size: 26px;
+}
+
+.overview-mini-cell--kanji {
+  width: 72px;
+  min-height: 64px;
+}
+
+.overview-cell__kana--kanji {
+  font-size: 26px;
+}
+
+/* ========================================
+   Kanji Zoom Modal details
+   ======================================== */
+.zoom-card--kanji {
+  width: 300px;
+  height: auto;
+  padding: 20px 24px;
+  gap: 8px;
+  align-items: flex-start;
+}
+
+.zoom-kanji-details {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+}
+
+.zoom-kanji-row {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.zoom-kanji-label {
+  font-size: 11px;
+  color: rgba(255,255,255,0.6);
+  flex-shrink: 0;
+}
+
+.zoom-kanji-value {
+  font-size: 15px;
+  color: #fff;
+}
+
+.zoom-kanji-reading {
+  font-size: 13px;
+  color: rgba(255,255,255,0.75);
+}
+
+.zoom-kanji-row--example {
+  margin-top: 4px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(255,255,255,0.15);
+}
+
+/* ========================================
+   Kanji Stats — kanji size in stat card
+   ======================================== */
+.stats__kana--kanji {
+  font-size: 30px;
+}
+
+/* ========================================
+   Kanji progress bar color
+   ======================================== */
+.progress__fill--kanji {
+  background: var(--color-accent-kanji);
+}
+

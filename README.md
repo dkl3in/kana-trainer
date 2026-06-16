@@ -1,62 +1,76 @@
-# Kana Trainer
+# Kana & Kanji Trainer
 
-A Progressive Web App (PWA) for practising the Japanese scripts Hiragana and Katakana.
+Eine Progressive Web App (PWA) zum Lernen der japanischen Schriftsysteme Hiragana, Katakana sowie der JLPT N5 Kanji.
 
-## Features
+## Funktionen
 
-### Quiz
-- Multiple-choice quiz for Hiragana, Katakana, or mixed
-- 8 answer options per question
-- Auto-advance timer (2 s on correct, 3 s on wrong)
-- Weighted random system: incorrectly answered characters appear more frequently
+### Hauptmenü
+- Auswahl zwischen **Kana** (Hiragana & Katakana) und **Kanji N5** (85 Zeichen)
+- Gesamtfortschritt beider Bereiche auf einen Blick
 
-### Learn
-- All characters grouped by row (Base / Dakuten & Handakuten / Yōon)
-- Interactive flip cards: front shows Kana, back shows Romaji (or vice versa)
-- Switchable between Kana → Romaji and Romaji → Kana
-- **Block mode:** Practise individual character rows directly from the learn view
+### Quiz (Kana & Kanji)
+- Multiple-Choice mit 8 Antwortoptionen
+- Auto-Weiter-Timer (2 s bei richtig, 3 s bei falsch)
+- Gewichtetes Zufallssystem: falsch beantwortete Zeichen erscheinen häufiger
+- **Kana:** Modi Hiragana / Katakana / Gemischt
+- **Kanji:** Modi Bedeutung (Kanji → Deutsch) und Lesung (Kanji → On'yomi · Kun'yomi)
+- **Block-Modus:** direkt aus der Lernansicht einen Block zum Üben starten
 
-### Overview
-- Full Gojūon table (五十音) for Hiragana and Katakana
-- Dakuten, Handakuten, and Yōon sections
-- Click any cell to open a zoom modal with a large display
-- Navigate within the modal via swipe (touch) or arrow keys
+### Lernen (Kana & Kanji)
+- Interaktive 3D-Flipkarten, nach Zeichengruppen geordnet
+- Kana: Kana → Romaji oder Romaji → Kana
+- Kanji: Kanji → Bedeutung oder Bedeutung → Kanji; Rückseite zeigt Bedeutung, On'yomi, Kun'yomi und Beispielwort
+- „Diesen Block üben"-Button je Gruppe
 
-### Progress & Stats
-- Level system: characters are unlocked in packs of 8
-- A pack is mastered once all characters have been answered correctly 2× in a row
-- Extras (Dakuten + Yōon) unlock once all base characters are mastered
-- Stats tab shows progress bars and per-character error analysis
-- 5 unlockable badges (e.g. "Base mastered", "50 correct")
-- Reset progress with a confirmation dialog
+### Übersicht (Kana & Kanji)
+- Kana: vollständige Gojūon-Tabelle (五十音), Dakuten- und Yōon-Raster
+- Kanji: alle 85 N5-Kanji nach Kategorien gruppiert
+- Zoom-Modal: großes Zeichen, alle Lesungen, Bedeutungen und Beispielwort
+- Navigation per Wischen (Touch) oder Pfeiltasten
+
+### Statistik (Kana & Kanji)
+- Fortschrittsbalken pro Gruppe / Modus
+- Fehlerliste (absteigend nach Fehleranzahl)
+- Badges für Lernerfolge
+- Fortschritt zurücksetzen mit Bestätigungsdialog
+
+### Level-System
+- Zeichen werden in 8er-Paketen freigeschaltet
+- Ein Paket gilt als gemeistert, wenn alle Zeichen Streak ≥ 2 haben
+- Kana-Extras (Dakuten + Yōon) werden erst nach vollständiger Basis freigeschaltet
 
 ### PWA
-- Installable as an app on mobile and desktop
-- Fully usable offline (Service Worker via Workbox)
-- Optimised for mobile including safe-area support (iPhone notch / home bar)
+- Installierbar auf Mobil und Desktop
+- Vollständig offline nutzbar (Service Worker via Workbox)
+- Optimiert für mobile Geräte inkl. Safe-Area-Unterstützung
 
 ## Tech Stack
 
-- [Vue 3](https://vuejs.org/) with `<script setup>` SFCs
-- [Vite](https://vitejs.dev/) as build tool
-- [vite-plugin-pwa](https://vite-pwa-org.netlify.app/) for Service Worker and Web App Manifest
-- [Iconify / Carbon Icons](https://icon-sets.iconify.design/carbon/) for icons
+| Technologie | Zweck |
+|---|---|
+| [Vue 3](https://vuejs.org/) | UI-Framework, ausschließlich `<script setup>` SFCs |
+| [Vite](https://vitejs.dev/) | Build-Tool & Dev-Server |
+| [Vue Router 4](https://router.vuejs.org/) | Hash-basiertes Routing |
+| [vue-i18n 11](https://vue-i18n.intlify.dev/) | Internationalisierung (DE / EN) |
+| [vite-plugin-pwa](https://vite-pwa-org.netlify.app/) | Service Worker & Web App Manifest |
+| [Iconify / Carbon Icons](https://icon-sets.iconify.design/carbon/) | Icons |
 
-## Development
+## Entwicklung
 
 ```bash
-# Install dependencies
+# Abhängigkeiten installieren
 npm install
 
-# Start dev server
+# Dev-Server starten (http://localhost:5173/kana-trainer/)
 npm run dev
 
-# Create production build
+# Produktions-Build erstellen
 npm run build
 
-# Preview production build locally
+# Produktions-Build lokal vorschauen
 npm run preview
 
-# Generate PWA PNG icons from public/favicon.svg
+# PWA-PNG-Icons aus public/favicon.svg generieren
 npm run generate-icons
 ```
+
