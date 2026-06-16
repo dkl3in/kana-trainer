@@ -71,15 +71,19 @@ export const extraLevel = computed(() => calcLevel(extraPacks.value))
 
 const hiraUnlocked = computed(() => Math.min((hiraLevel.value + 1) * PACK_SIZE, totalHiraBase.value))
 const kataUnlocked = computed(() => Math.min((kataLevel.value + 1) * PACK_SIZE, totalKataBase.value))
-const extrasUnlocked = computed(() => Math.min((extraLevel.value + 1) * PACK_SIZE, totalExtras.value))
+const extrasUnlockedCount = computed(() => Math.min((extraLevel.value + 1) * PACK_SIZE, totalExtras.value))
 
 export const baseMastered = computed(() =>
   hiraMastered.value === totalHiraBase.value && kataMastered.value === totalKataBase.value
 )
 
+// One-way latch: once base is mastered, extras stay unlocked permanently
+export const extrasUnlocked = ref(false)
+watch(baseMastered, (val) => { if (val) extrasUnlocked.value = true })
+
 const activeBaseHira = computed(() => hiraBase.value.slice(0, hiraUnlocked.value))
 const activeBaseKata = computed(() => kataBase.value.slice(0, kataUnlocked.value))
-const activeExtras = computed(() => extraItems.value.slice(0, extrasUnlocked.value))
+const activeExtras = computed(() => extraItems.value.slice(0, extrasUnlockedCount.value))
 
 export const activePool = computed(() => {
   if (blockFocusIds.value) {
@@ -90,7 +94,7 @@ export const activePool = computed(() => {
   else if (mode.value === 'katakana') pool = activeBaseKata.value
   else pool = activeBaseHira.value.concat(activeBaseKata.value)
 
-  if (baseMastered.value) {
+  if (extrasUnlocked.value) {
     pool = pool.concat(activeExtras.value)
   }
   return pool
@@ -166,6 +170,7 @@ export function sampleOptions(correctItem, pool, count = 8) {
 export function saveProgress() {
   const payload = {
     mode: mode.value,
+    extrasUnlocked: extrasUnlocked.value,
     items: allItems.map(i => ({
       id: i.id, correct: i.correct, wrong: i.wrong, streak: i.streak, weight: i.weight
     }))
@@ -179,6 +184,7 @@ export function loadProgress() {
   try {
     const data = JSON.parse(raw)
     if (data.mode) mode.value = data.mode
+    if (data.extrasUnlocked) extrasUnlocked.value = true
     if (Array.isArray(data.items)) {
       const map = new Map(data.items.map(i => [i.id, i]))
       allItems.forEach(i => {
@@ -191,6 +197,8 @@ export function loadProgress() {
         }
       })
     }
+    // Migration: if old data has no flag but base was already mastered, re-unlock
+    if (!extrasUnlocked.value && baseMastered.value) extrasUnlocked.value = true
   } catch (e) {
     console.warn('Could not load kana progress:', e)
   }
@@ -198,6 +206,7 @@ export function loadProgress() {
 
 export function resetProgress() {
   localStorage.removeItem(STORAGE_KEY)
+  extrasUnlocked.value = false
   allItems.forEach(i => { i.correct = 0; i.wrong = 0; i.streak = 0; i.weight = 1 })
 }
 
