@@ -163,7 +163,7 @@
     <!-- Bottom Navigation -->
     <nav class="bottom-nav">
       <button class="bottom-nav__btn" :class="{ 'bottom-nav__btn--active': view === 'quiz' }" @click="view = 'quiz'" aria-label="Quiz">
-        <Icon icon="carbon:quiz" />
+        <Icon icon="carbon:exam-mode" />
       </button>
       <button class="bottom-nav__btn" :class="{ 'bottom-nav__btn--active': view === 'learn' }" @click="view = 'learn'" aria-label="Lernen">
         <Icon icon="carbon:education" />
@@ -247,6 +247,8 @@ const extraPacks = computed(() => makePacks(extraItems.value))
 const hiraMastered = computed(() => hiraBase.value.filter(i => i.streak >= 2).length)
 const kataMastered = computed(() => kataBase.value.filter(i => i.streak >= 2).length)
 const extraMastered = computed(() => extraItems.value.filter(i => i.streak >= 2).length)
+const dakutenMastered = computed(() => allItems.filter(i => i.group === 'extra' && i.streak >= 2).length)
+const yoonMastered = computed(() => allItems.filter(i => i.group === 'yoon' && i.streak >= 2).length)
 
 const calcLevel = (packs) => {
   let level = 0
@@ -307,12 +309,22 @@ const extraProgress = computed(() =>
  * ---------------------------- */
 const badges = computed(() => {
   const totalCorrect = allItems.reduce((s, i) => s + i.correct, 0)
+  const totalDakuten = 50  // 25 hiragana extra + 25 katakana extra
+  const totalYoon = 66     // 33 hiragana yoon + 33 katakana yoon
   return [
     { id: 'b1', icon: 'carbon:sprout', title: 'Erster Treffer', unlocked: totalCorrect >= 1 },
     { id: 'b2', icon: 'carbon:fire', title: '10 richtig', unlocked: totalCorrect >= 10 },
+    { id: 'b_s1', icon: 'carbon:flash', title: 'Erstes Kana verinnerlicht', unlocked: allItems.some(i => i.correct >= 10) },
     { id: 'b3', icon: 'carbon:certificate', title: '50 richtig', unlocked: totalCorrect >= 50 },
+    { id: 'b_n1', icon: 'carbon:rocket', title: '100 richtig', unlocked: totalCorrect >= 100 },
+    { id: 'b_n2', icon: 'carbon:text-italic', title: 'Hiragana gemeistert', unlocked: hiraMastered.value === totalHiraBase.value },
+    { id: 'b_n3', icon: 'carbon:medal', title: '200 richtig', unlocked: totalCorrect >= 200 },
+    { id: 'b_n4', icon: 'carbon:translate', title: 'Katakana gemeistert', unlocked: kataMastered.value === totalKataBase.value },
     { id: 'b4', icon: 'carbon:trophy', title: 'Basis gemeistert', unlocked: baseMastered.value },
-    { id: 'b5', icon: 'carbon:star-filled', title: 'Extras gestartet', unlocked: extraMastered.value >= 1 }
+    { id: 'b5', icon: 'carbon:star-filled', title: 'Extras gestartet', unlocked: extraMastered.value >= 1 },
+    { id: 'b_n5', icon: 'carbon:diploma', title: 'Dakuten gemeistert', unlocked: dakutenMastered.value === totalDakuten },
+    { id: 'b_n6', icon: 'carbon:star', title: 'Yōon gemeistert', unlocked: yoonMastered.value === totalYoon },
+    { id: 'b_n7', icon: 'carbon:lightning', title: 'Serienmeister', unlocked: allItems.some(i => i.streak >= 10) }
   ]
 })
 
