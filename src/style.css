@@ -92,6 +92,14 @@ body {
   box-shadow: 0 1px 3px rgba(0,0,0,.12);
 }
 
+.mode-tabs__mastery {
+  font-size: 10px;
+  color: #1b8f2b;
+  vertical-align: super;
+  margin-left: 1px;
+  line-height: 0;
+}
+
 .app__status {
   display: flex;
   gap: 16px;
@@ -403,6 +411,13 @@ body {
 .quiz__next-link:hover {
   color: #111;
   -webkit-text-fill-color: #111;
+}
+
+.quiz__mastery-msg {
+  color: #1b8f2b;
+  font-weight: 600;
+  font-size: 15px;
+  margin: 4px 0 0;
 }
 
 /* ---- Stats ---- */

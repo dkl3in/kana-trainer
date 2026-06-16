@@ -4,8 +4,8 @@
     <template v-if="view === 'quiz'">
       <div class="mode-tabs-wrap" v-if="!blockFocusIds">
         <div class="mode-tabs">
-          <button class="mode-tabs__btn" :class="{ 'mode-tabs__btn--active': mode === 'hiragana' }" @click="mode = 'hiragana'">あ</button>
-          <button class="mode-tabs__btn" :class="{ 'mode-tabs__btn--active': mode === 'katakana' }" @click="mode = 'katakana'">ア</button>
+          <button class="mode-tabs__btn" :class="{ 'mode-tabs__btn--active': mode === 'hiragana' }" @click="mode = 'hiragana'">あ<span v-if="hiraBaseMastered" class="mode-tabs__mastery">★</span></button>
+          <button class="mode-tabs__btn" :class="{ 'mode-tabs__btn--active': mode === 'katakana' }" @click="mode = 'katakana'">ア<span v-if="kataBaseMastered" class="mode-tabs__mastery">★</span></button>
           <button class="mode-tabs__btn" :class="{ 'mode-tabs__btn--active': mode === 'mixed' }" @click="mode = 'mixed'">あ·ア</button>
         </div>
       </div>
@@ -49,6 +49,8 @@
           <p class="quiz__countdown">
             Weiter in <span class="quiz__countdown-num">{{ countdown }}</span>s
           </p>
+
+          <p v-if="justMasteredMsg" class="quiz__mastery-msg">{{ justMasteredMsg }}</p>
 
           <button class="quiz__next-link" @click="next">Nächstes Zeichen</button>
         </div>
@@ -247,6 +249,26 @@ const extraPacks = computed(() => makePacks(extraItems.value))
 const hiraMastered = computed(() => hiraBase.value.filter(i => i.streak >= 2).length)
 const kataMastered = computed(() => kataBase.value.filter(i => i.streak >= 2).length)
 const extraMastered = computed(() => extraItems.value.filter(i => i.streak >= 2).length)
+
+const hiraBaseMastered = computed(() => hiraMastered.value === totalHiraBase.value)
+const kataBaseMastered = computed(() => kataMastered.value === totalKataBase.value)
+
+const justMasteredMsg = ref(null)
+const hiraShown = ref(false)
+const kataShown = ref(false)
+
+watch(hiraMastered, (val) => {
+  if (!hiraShown.value && val === totalHiraBase.value) {
+    justMasteredMsg.value = 'Hiragana gemeistert! ★'
+    hiraShown.value = true
+  }
+})
+watch(kataMastered, (val) => {
+  if (!kataShown.value && val === totalKataBase.value) {
+    justMasteredMsg.value = 'Katakana gemeistert! ★'
+    kataShown.value = true
+  }
+})
 const dakutenMastered = computed(() => allItems.filter(i => i.group === 'extra' && i.streak >= 2).length)
 const yoonMastered = computed(() => allItems.filter(i => i.group === 'yoon' && i.streak >= 2).length)
 
@@ -398,6 +420,7 @@ function next() {
   answered.value = false
   isCorrect.value = false
   selectedOpt.value = null
+  justMasteredMsg.value = null
   current.value = weightedPick(activePool.value)
   options.value = sampleOptions(current.value, 8)
 }
