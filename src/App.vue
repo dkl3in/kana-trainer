@@ -177,12 +177,63 @@
         <Icon icon="carbon:analytics" />
       </button>
     </nav>
+
+    <!-- DEV TOOLBAR (only in development builds) -->
+    <template v-if="isDev">
+      <button class="dev-trigger" @click="devOpen = !devOpen" title="Dev Tools">⚙</button>
+      <div v-if="devOpen" class="dev-toolbar">
+        <div class="dev-toolbar__title">Dev Tools</div>
+        <div class="dev-toolbar__group">
+          <div class="dev-toolbar__label">Hiragana Basis</div>
+          <button class="dev-toolbar__btn" @click="devAlmostMaster('hiragana', 'base')">45/46 gemeistert</button>
+          <button class="dev-toolbar__btn" @click="devFullMaster('hiragana', 'base')">Alle gemeistert</button>
+        </div>
+        <div class="dev-toolbar__group">
+          <div class="dev-toolbar__label">Katakana Basis</div>
+          <button class="dev-toolbar__btn" @click="devAlmostMaster('katakana', 'base')">45/46 gemeistert</button>
+          <button class="dev-toolbar__btn" @click="devFullMaster('katakana', 'base')">Alle gemeistert</button>
+        </div>
+        <div class="dev-toolbar__group">
+          <div class="dev-toolbar__label">Extra Kana (Dakuten + Yōon)</div>
+          <button class="dev-toolbar__btn" @click="devAlmostMaster(null, 'extra')">Bis auf eins gemeistert</button>
+          <button class="dev-toolbar__btn" @click="devAlmostMaster(null, 'yoon')">Bis auf eins gemeistert</button>
+          <button class="dev-toolbar__btn" @click="devFullMaster(null, 'extra')">Extras alle gemeistert</button>
+        </div>
+        <div class="dev-toolbar__group">
+          <button class="dev-toolbar__btn dev-toolbar__btn--danger" @click="resetProgress">Reset alles</button>
+        </div>
+      </div>
+    </template>
   </div>
 </template>
 
 <script setup>
 import { computed, reactive, ref, watch, onMounted, onBeforeUnmount } from 'vue'
 import { Icon } from '@iconify/vue'
+
+const isDev = import.meta.env.DEV
+const devOpen = ref(false)
+
+function devAlmostMaster(script, group) {
+  const targets = allItems.filter(i =>
+    (script === null || i.script === script) && i.group === group
+  )
+  targets.slice(0, targets.length - 1).forEach(i => {
+    i.streak = 2; i.weight = 0.3; i.correct = Math.max(i.correct, 2)
+  })
+  const last = targets[targets.length - 1]
+  if (last) { last.streak = 1; last.weight = 10 }
+  mode.value = script === 'katakana' ? 'katakana' : 'hiragana'
+  next()
+}
+
+function devFullMaster(script, group) {
+  const targets = allItems.filter(i =>
+    (script === null || i.script === script) && i.group === group
+  )
+  targets.forEach(i => { i.streak = 2; i.weight = 0.3; i.correct = Math.max(i.correct, 2) })
+  next()
+}
 import LearnView from './components/LearnView.vue'
 import OverviewView from './components/OverviewView.vue'
 import {
@@ -262,13 +313,13 @@ watch(hiraMastered, (val) => {
     justMasteredMsg.value = 'Hiragana gemeistert! ★'
     hiraShown.value = true
   }
-})
+}, { flush: 'sync' })
 watch(kataMastered, (val) => {
   if (!kataShown.value && val === totalKataBase.value) {
     justMasteredMsg.value = 'Katakana gemeistert! ★'
     kataShown.value = true
   }
-})
+}, { flush: 'sync' })
 const dakutenMastered = computed(() => allItems.filter(i => i.group === 'extra' && i.streak >= 2).length)
 const yoonMastered = computed(() => allItems.filter(i => i.group === 'yoon' && i.streak >= 2).length)
 
@@ -436,7 +487,7 @@ function submit(opt) {
     current.value.correct++
     current.value.streak++
     current.value.weight = Math.max(0.3, current.value.weight * 0.7)
-    startCountdown(2)
+    startCountdown(justMasteredMsg.value ? 6 : 2)
   } else {
     current.value.wrong++
     current.value.streak = 0

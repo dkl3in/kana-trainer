@@ -420,6 +420,92 @@ body {
   margin: 4px 0 0;
 }
 
+/* ---- Dev Toolbar ---- */
+.dev-trigger {
+  position: fixed;
+  top: 8px;
+  right: 8px;
+  width: 28px;
+  height: 28px;
+  background: rgba(0,0,0,0.08);
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+  z-index: 9000;
+  color: #999;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dev-trigger:hover {
+  background: rgba(0,0,0,0.16);
+  color: #333;
+}
+
+.dev-toolbar {
+  position: fixed;
+  top: 40px;
+  right: 8px;
+  background: #1e1e1e;
+  color: #eee;
+  border-radius: 10px;
+  padding: 12px;
+  z-index: 9001;
+  width: 230px;
+  box-shadow: 0 4px 20px rgba(0,0,0,.4);
+  font-size: 13px;
+}
+
+.dev-toolbar__title {
+  font-weight: 700;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #888;
+  margin-bottom: 10px;
+}
+
+.dev-toolbar__group {
+  margin-bottom: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.dev-toolbar__label {
+  font-size: 11px;
+  color: #777;
+  margin-bottom: 2px;
+}
+
+.dev-toolbar__btn {
+  background: #333;
+  color: #eee;
+  border: none;
+  border-radius: 5px;
+  padding: 5px 8px;
+  font-size: 12px;
+  cursor: pointer;
+  text-align: left;
+}
+
+.dev-toolbar__btn:hover {
+  background: #444;
+}
+
+.dev-toolbar__btn--danger {
+  background: #5a1a1a;
+  color: #ffaaaa;
+}
+
+.dev-toolbar__btn--danger:hover {
+  background: #7a2a2a;
+}
+
 /* ---- Stats ---- */
 .stats {
   margin-top: 12px;
