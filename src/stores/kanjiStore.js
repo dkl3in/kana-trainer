@@ -76,9 +76,10 @@ export const wrongList = computed(() => {
 export const badges = computed(() => {
   const allItems = [...meaningItems, ...readingItems]
   const totalCorrect = allItems.reduce((s, i) => s + i.correct, 0)
+  const uniqueKanjiSeen = meaningItems.filter(i => i.correct >= 1).length
   return [
     { id: 'k1', icon: 'carbon:sprout', titleKey: 'badges.kanjiFirst', unlocked: totalCorrect >= 1 },
-    { id: 'k2', icon: 'carbon:fire', titleKey: 'badges.kanjiTen', unlocked: totalCorrect >= 10 },
+    { id: 'k2', icon: 'carbon:fire', titleKey: 'badges.kanjiTen', unlocked: uniqueKanjiSeen >= 10 },
     { id: 'k3', icon: 'carbon:flash', titleKey: 'badges.kanjiInternalized', unlocked: allItems.some(i => i.correct >= 10) },
     { id: 'k4', icon: 'carbon:document', titleKey: 'badges.kanji25', unlocked: (meaningMastered.value + readingMastered.value) >= 25 },
     { id: 'k5', icon: 'carbon:translate', titleKey: 'badges.kanjiMeaning', unlocked: meaningMastered.value === totalKanji.value },
