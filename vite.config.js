@@ -10,9 +10,9 @@ export default defineConfig({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.svg', 'icons/apple-touch-icon.png'],
       manifest: {
-        name: 'Kana Trainer',
-        short_name: 'Kana',
-        description: 'Learn Japanese Hiragana and Katakana',
+        name: 'Kana & Kanji Trainer',
+        short_name: 'Kana & Kanji',
+        description: 'Learn Japanese Hiragana, Katakana and JLPT N5 Kanji',
         theme_color: '#1a1a2e',
         background_color: '#1a1a2e',
         display: 'standalone',
@@ -43,4 +43,7 @@ export default defineConfig({
     }),
   ],
   base: '/kana-trainer/',
+  test: {
+    environment: 'node'
+  }
 })

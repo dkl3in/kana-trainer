@@ -76,12 +76,12 @@
       @touchstart.passive="onTouchStart"
       @touchend="onTouchEnd"
     >
-      <button class="zoom-close" @click.stop="closeZoom" aria-label="Schließen">✕</button>
+      <button class="zoom-close" @click.stop="closeZoom" :aria-label="$t('overview.close')">✕</button>
       <div class="zoom-card">
         <span class="zoom-card__kana">{{ selectedCell.kana }}</span>
         <span class="zoom-card__romaji">{{ selectedCell.romaji }}</span>
       </div>
-      <p class="zoom-hint">← Wischen zum Navigieren →</p>
+      <p class="zoom-hint">{{ $t('overview.swipeHint') }}</p>
     </div>
   </Teleport>
 </template>

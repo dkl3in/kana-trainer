@@ -7,7 +7,7 @@ export default {
     },
     kanji: {
       label: 'Kanji N5',
-      desc: '80 Kanji for JLPT N5'
+      desc: '85 Kanji for JLPT N5'
     }
   },
   nav: {
@@ -20,6 +20,7 @@ export default {
   quiz: {
     correct: 'Correct!',
     wrong: 'Wrong – correct answer: {answer}',
+    wrongText: 'Wrong – correct answer:',
     next: 'Next in {n}s',
     nextBtn: 'Next character',
     mastered: '{label} mastered! ★',

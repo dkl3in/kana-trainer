@@ -57,18 +57,16 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref } from 'vue'
 import { Icon } from '@iconify/vue'
 import ResetDialog from '../shared/ResetDialog.vue'
 import {
   meaningMastered, readingMastered, totalKanji,
   meaningProgress, readingProgress,
-  wrongList, badges, loadProgress, resetProgress
+  wrongList, badges, resetProgress
 } from '../../stores/kanjiStore.js'
 
 const showReset = ref(false)
-
-onMounted(() => loadProgress())
 
 function doReset() {
   showReset.value = false

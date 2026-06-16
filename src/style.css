@@ -339,6 +339,53 @@ body {
   font-size: 18px;
   min-height: 60px;
   color: #111;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+}
+
+.quiz__option--reading {
+  font-size: 16px;
+  align-items: flex-start;
+  justify-content: flex-start;
+  text-align: left;
+  padding-left: 16px;
+  padding-top: 12px;
+}
+
+.quiz__option-reading-label {
+  display: block;
+  font-size: 11px;
+  font-weight: 600;
+  opacity: 0.55;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  line-height: 1.3;
+}
+
+.quiz__option-reading-label--feedback {
+  font-size: 12px;
+}
+
+.quiz__option-reading-value {
+  display: block;
+  font-size: 15px;
+  line-height: 1.4;
+  margin-bottom: 6px;
+}
+
+.quiz__option-reading-value--feedback {
+  font-size: 18px;
+}
+
+.quiz__correct-reading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  margin-bottom: 8px;
 }
 
 @media (max-width: 480px) {
@@ -381,7 +428,7 @@ body {
 
 .quiz__message {
   font-size: 18px;
-  margin-bottom: 8px;
+  margin-bottom: 4px;
 }
 
 .quiz__message--correct {
@@ -1259,6 +1306,10 @@ body {
   padding: 20px 24px;
   gap: 8px;
   align-items: flex-start;
+}
+
+.zoom-card--kanji .zoom-card__kana {
+  align-self: center;
 }
 
 .zoom-kanji-details {

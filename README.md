@@ -1,76 +1,106 @@
 # Kana & Kanji Trainer
 
-Eine Progressive Web App (PWA) zum Lernen der japanischen Schriftsysteme Hiragana, Katakana sowie der JLPT N5 Kanji.
+A Progressive Web App (PWA) for learning the Japanese scripts Hiragana, Katakana, and JLPT N5 Kanji.
 
-## Funktionen
+## Features
 
-### Hauptmenü
-- Auswahl zwischen **Kana** (Hiragana & Katakana) und **Kanji N5** (85 Zeichen)
-- Gesamtfortschritt beider Bereiche auf einen Blick
+### Home screen
+- Choose between **Kana** (Hiragana & Katakana) and **Kanji N5** (85 characters)
+- Overall progress of both sections at a glance
 
 ### Quiz (Kana & Kanji)
-- Multiple-Choice mit 8 Antwortoptionen
-- Auto-Weiter-Timer (2 s bei richtig, 3 s bei falsch)
-- Gewichtetes Zufallssystem: falsch beantwortete Zeichen erscheinen häufiger
-- **Kana:** Modi Hiragana / Katakana / Gemischt
-- **Kanji:** Modi Bedeutung (Kanji → Deutsch) und Lesung (Kanji → On'yomi · Kun'yomi)
-- **Block-Modus:** direkt aus der Lernansicht einen Block zum Üben starten
+- Multiple choice with 8 answer options
+- Auto-advance timer
+- Weighted random system: incorrectly answered characters appear more frequently
+- **Kana:** Hiragana / Katakana / Mixed modes
+- **Kanji:** Meaning (Kanji → English) and Reading (Kanji → On'yomi · Kun'yomi) modes
+- **Block mode:** start practising a specific block directly from the Learn view
 
-### Lernen (Kana & Kanji)
-- Interaktive 3D-Flipkarten, nach Zeichengruppen geordnet
-- Kana: Kana → Romaji oder Romaji → Kana
-- Kanji: Kanji → Bedeutung oder Bedeutung → Kanji; Rückseite zeigt Bedeutung, On'yomi, Kun'yomi und Beispielwort
-- „Diesen Block üben"-Button je Gruppe
+### Learn (Kana & Kanji)
+- Interactive 3D flip cards, grouped by character group
+- Kana: Kana → Romaji or Romaji → Kana
+- Kanji: Kanji → Meaning or Meaning → Kanji; back side shows meaning, On'yomi, Kun'yomi, and example word
+- "Practise this block" button per group
 
-### Übersicht (Kana & Kanji)
-- Kana: vollständige Gojūon-Tabelle (五十音), Dakuten- und Yōon-Raster
-- Kanji: alle 85 N5-Kanji nach Kategorien gruppiert
-- Zoom-Modal: großes Zeichen, alle Lesungen, Bedeutungen und Beispielwort
-- Navigation per Wischen (Touch) oder Pfeiltasten
+### Overview (Kana & Kanji)
+- Kana: full Gojūon table (五十音), Dakuten and Yōon grids
+- Kanji: all 85 N5 Kanji grouped by category
+- Zoom modal: large character, all readings, meanings, and example word
+- Navigation by swipe (touch) or arrow keys
 
-### Statistik (Kana & Kanji)
-- Fortschrittsbalken pro Gruppe / Modus
-- Fehlerliste (absteigend nach Fehleranzahl)
-- Badges für Lernerfolge
-- Fortschritt zurücksetzen mit Bestätigungsdialog
+### Stats (Kana & Kanji)
+- Progress bars per group / mode
+- Error list (sorted descending by error count)
+- Badges for learning milestones
+- Reset progress with confirmation dialog
 
-### Level-System
-- Zeichen werden in 8er-Paketen freigeschaltet
-- Ein Paket gilt als gemeistert, wenn alle Zeichen Streak ≥ 2 haben
-- Kana-Extras (Dakuten + Yōon) werden erst nach vollständiger Basis freigeschaltet
+### Level system
+- Characters are unlocked in packs of 8
+- A pack is considered mastered when all characters have streak ≥ 2
+- Kana extras (Dakuten + Yōon) only unlock after the full base is mastered
 
 ### PWA
-- Installierbar auf Mobil und Desktop
-- Vollständig offline nutzbar (Service Worker via Workbox)
-- Optimiert für mobile Geräte inkl. Safe-Area-Unterstützung
+- Installable on mobile and desktop
+- Fully usable offline (Service Worker via Workbox)
+- Optimised for mobile devices including safe-area support
 
 ## Tech Stack
 
-| Technologie | Zweck |
+| Technology | Purpose |
 |---|---|
-| [Vue 3](https://vuejs.org/) | UI-Framework, ausschließlich `<script setup>` SFCs |
-| [Vite](https://vitejs.dev/) | Build-Tool & Dev-Server |
-| [Vue Router 4](https://router.vuejs.org/) | Hash-basiertes Routing |
-| [vue-i18n 11](https://vue-i18n.intlify.dev/) | Internationalisierung (DE / EN) |
+| [Vue 3](https://vuejs.org/) | UI framework, exclusively `<script setup>` SFCs |
+| [Vite](https://vitejs.dev/) | Build tool & dev server |
+| [Vue Router 4](https://router.vuejs.org/) | Hash-based routing |
+| [vue-i18n 11](https://vue-i18n.intlify.dev/) | Internationalisation (DE / EN) |
 | [vite-plugin-pwa](https://vite-pwa-org.netlify.app/) | Service Worker & Web App Manifest |
 | [Iconify / Carbon Icons](https://icon-sets.iconify.design/carbon/) | Icons |
 
-## Entwicklung
+## Development
 
 ```bash
-# Abhängigkeiten installieren
+# Install dependencies
 npm install
 
-# Dev-Server starten (http://localhost:5173/kana-trainer/)
+# Start dev server (http://localhost:5173/kana-trainer/)
 npm run dev
 
-# Produktions-Build erstellen
+# Create production build
 npm run build
 
-# Produktions-Build lokal vorschauen
+# Preview production build locally
 npm run preview
 
-# PWA-PNG-Icons aus public/favicon.svg generieren
+# Run linting (must report 0 errors)
+npm run lint
+
+# Run tests (54 data-integrity tests)
+npm run test
+
+# Generate PWA PNG icons from public/favicon.svg
 npm run generate-icons
+```
+
+## Code Quality
+
+| Tool | Purpose | Config |
+|---|---|---|
+| ESLint | Linting (Vue + JS) | `eslint.config.js` — flat config, browser globals, `eslint-plugin-vue` |
+| Vitest | Data-integrity tests | `vite.config.js` → `test: { environment: 'node' }` |
+
+### Test files
+
+| File | Scope | Tests |
+|---|---|---|
+| `src/kana.test.js` | `kana.js` data integrity | 29 |
+| `src/kanji.test.js` | `kanji.js` data integrity | 25 |
+
+## Definition of Done
+
+A task is only considered complete when **all** of the following conditions are met:
+
+```bash
+npm run lint   # 0 errors
+npm run test   # all tests green
+npm run build  # exit code 0
 ```
 

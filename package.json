@@ -7,7 +7,9 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "generate-icons": "node scripts/generate-icons.js"
+    "generate-icons": "node scripts/generate-icons.js",
+    "lint": "eslint src/",
+    "test": "vitest run"
   },
   "dependencies": {
     "@iconify-json/carbon": "^1.2.23",
@@ -17,10 +19,14 @@
     "vue-router": "^4.6.4"
   },
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
     "@vitejs/plugin-vue": "^6.0.6",
+    "eslint": "^10.5.0",
+    "eslint-plugin-vue": "^10.9.2",
     "sharp": "^0.35.1",
     "vite": "^8.0.12",
-    "vite-plugin-pwa": "^1.3.0"
+    "vite-plugin-pwa": "^1.3.0",
+    "vitest": "^4.1.9"
   },
   "allowScripts": {
     "fsevents@2.3.3": true

@@ -58,10 +58,8 @@
 
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from 'vue'
-import { n5Kanji, KANJI_CATEGORY_DEFS } from '../../kanji.js'
-import { meaningItems, loadProgress } from '../../stores/kanjiStore.js'
-
-onMounted(() => loadProgress())
+import { KANJI_CATEGORY_DEFS } from '../../kanji.js'
+import { meaningItems } from '../../stores/kanjiStore.js'
 
 const categories = computed(() =>
   KANJI_CATEGORY_DEFS.map(cat => ({

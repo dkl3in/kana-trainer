@@ -1,3 +1,31 @@
+/**
+ * @typedef {'hiragana'|'katakana'} KanaScript
+ * @typedef {'base'|'extra'|'yoon'} KanaGroup
+ */
+
+/**
+ * A single kana quiz item (reactive).
+ * @typedef {Object} KanaItem
+ * @property {string}     id       - Unique ID: `${script}-${group}-${idx}-${kana}`
+ * @property {string}     kana     - The kana character(s)
+ * @property {string}     romaji   - Romanised pronunciation
+ * @property {KanaScript} script
+ * @property {KanaGroup}  group
+ * @property {number}     correct  - Total correct answers (persisted)
+ * @property {number}     wrong    - Total wrong answers (persisted)
+ * @property {number}     streak   - Current consecutive correct streak (persisted)
+ * @property {number}     weight   - Pick weight for weighted random selection (persisted)
+ */
+
+/**
+ * A row definition used by LearnView and OverviewView.
+ * @typedef {Object} RowDef
+ * @property {string} hLabel - Hiragana row label
+ * @property {string} kLabel - Katakana row label
+ * @property {number} start  - Start index (inclusive) into the source array
+ * @property {number} end    - End index (exclusive) into the source array
+ */
+
 export const baseHiragana = [
   ['あ','a'], ['い','i'], ['う','u'], ['え','e'], ['お','o'],
   ['か','ka'], ['き','ki'], ['く','ku'], ['け','ke'], ['こ','ko'],
@@ -70,6 +98,13 @@ export const yoonKatakana = [
   ['リャ','rya'], ['リュ','ryu'], ['リョ','ryo']
 ]
 
+/**
+ * Creates reactive quiz items from a raw kana array.
+ * @param {[string, string][]} arr    - Array of [kana, romaji] tuples
+ * @param {KanaScript}         script - Script type
+ * @param {KanaGroup}          group  - Group type
+ * @returns {KanaItem[]}
+ */
 export const makeItems = (arr, script, group) =>
   arr.map(([kana, romaji], idx) => ({
     id: `${script}-${group}-${idx}-${kana}`,

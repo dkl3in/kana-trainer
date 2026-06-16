@@ -58,7 +58,7 @@ import {
   mode, blockFocusIds, blockLabel, activePool,
   hiraBaseMastered, kataBaseMastered, hiraMastered, kataMastered,
   totalHiraBase, totalKataBase,
-  weightedPick, sampleOptions, loadProgress
+  weightedPick, sampleOptions
 } from '../../stores/kanaStore.js'
 
 const { t } = useI18n()
@@ -143,7 +143,6 @@ function clearBlock() {
 watch(mode, next, { flush: 'sync' })
 
 onMounted(() => {
-  loadProgress()
   next()
 })
 

@@ -71,7 +71,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref } from 'vue'
 import { Icon } from '@iconify/vue'
 import ResetDialog from '../shared/ResetDialog.vue'
 import {
@@ -79,12 +79,10 @@ import {
   hiraMastered, kataMastered, extraMastered,
   totalHiraBase, totalKataBase, totalExtras,
   hiraProgress, kataProgress, extraProgress,
-  wrongList, badges, loadProgress, resetProgress
+  wrongList, badges, resetProgress
 } from '../../stores/kanaStore.js'
 
 const showReset = ref(false)
-
-onMounted(() => loadProgress())
 
 function doReset() {
   showReset.value = false

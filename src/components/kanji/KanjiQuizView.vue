@@ -33,19 +33,42 @@
           class="quiz__option"
           :class="{
             'quiz__option--correct': answered && opt.id === current?.id,
-            'quiz__option--wrong': answered && selectedOpt?.id === opt.id && opt.id !== current?.id
+            'quiz__option--wrong': answered && selectedOpt?.id === opt.id && opt.id !== current?.id,
+            'quiz__option--reading': quizMode === 'reading'
           }"
           :disabled="answered"
           @click="submit(opt)"
         >
-          {{ opt.answer }}
+          <template v-if="quizMode === 'reading'">
+            <template v-if="opt.onyomi?.length">
+              <span class="quiz__option-reading-label">On</span>
+              <span class="quiz__option-reading-value">{{ opt.onyomi.join('\u3001') }}</span>
+            </template>
+            <template v-if="opt.kunyomi?.length">
+              <span class="quiz__option-reading-label">Kun</span>
+              <span class="quiz__option-reading-value">{{ opt.kunyomi.join('\u3001') }}</span>
+            </template>
+          </template>
+          <template v-else>{{ opt.answer }}</template>
         </button>
       </div>
 
       <div class="quiz__feedback" v-if="answered">
         <p class="quiz__message" :class="{ 'quiz__message--correct': isCorrect, 'quiz__message--wrong': !isCorrect }">
-          {{ isCorrect ? $t('quiz.correct') : $t('quiz.wrong', { answer: current.answer }) }}
+          <template v-if="isCorrect">{{ $t('quiz.correct') }}</template>
+          <template v-else-if="quizMode !== 'reading'">{{ $t('quiz.wrong', { answer: current.answer }) }}</template>
+          <template v-else>{{ $t('quiz.wrongText') }}</template>
         </p>
+        <div v-if="!isCorrect && quizMode === 'reading'" class="quiz__correct-reading">
+          <template v-if="current.onyomi?.length">
+            <span class="quiz__option-reading-label quiz__option-reading-label--feedback">On</span>
+            <span class="quiz__option-reading-value quiz__option-reading-value--feedback">{{ current.onyomi.join('\u3001') }}</span>
+          </template>
+          <template v-if="current.kunyomi?.length">
+            <span class="quiz__option-reading-label quiz__option-reading-label--feedback">Kun</span>
+            <span class="quiz__option-reading-value quiz__option-reading-value--feedback">{{ current.kunyomi.join('\u3001') }}</span>
+          </template>
+        </div>
         <p class="quiz__countdown">{{ $t('quiz.next', { n: countdown }) }}</p>
         <button class="quiz__next-link" @click="next">{{ $t('quiz.nextBtn') }}</button>
       </div>
@@ -57,7 +80,7 @@
 import { ref, onMounted, onBeforeUnmount, watch } from 'vue'
 import {
   quizMode, blockFocusIds, blockLabel, activePool,
-  weightedPick, sampleOptions, loadProgress
+  weightedPick, sampleOptions
 } from '../../stores/kanjiStore.js'
 
 const answered = ref(false)
@@ -125,7 +148,6 @@ function clearBlock() {
 watch(quizMode, next, { flush: 'sync' })
 
 onMounted(() => {
-  loadProgress()
   next()
 })
 

@@ -4,7 +4,7 @@
       <div class="reset-dialog">
         <div class="reset-dialog__icon"><Icon icon="carbon:warning-filled" /></div>
         <h3 class="reset-dialog__title">{{ $t('stats.reset.title') }}</h3>
-        <p class="reset-dialog__text" v-html="$t('stats.reset.text')"></p>
+        <p class="reset-dialog__text">{{ $t('stats.reset.text') }}</p>
         <div class="reset-dialog__actions">
           <button class="reset-dialog__cancel" @click="$emit('update:modelValue', false)">
             {{ $t('stats.reset.cancel') }}

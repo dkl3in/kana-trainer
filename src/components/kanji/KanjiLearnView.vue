@@ -66,14 +66,12 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
-import { n5Kanji, KANJI_CATEGORY_DEFS } from '../../kanji.js'
-import { meaningItems, loadProgress, blockFocusIds, blockLabel } from '../../stores/kanjiStore.js'
+import { KANJI_CATEGORY_DEFS } from '../../kanji.js'
+import { meaningItems, blockFocusIds, blockLabel } from '../../stores/kanjiStore.js'
 
 const router = useRouter()
-
-onMounted(() => loadProgress())
 
 const direction = ref('kanji-to-meaning')
 const flipped = ref(new Set())

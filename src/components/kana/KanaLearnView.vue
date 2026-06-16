@@ -13,23 +13,23 @@
           class="learn__toggle"
           :class="{ 'learn__toggle--active': direction === 'kana-to-romaji' }"
           @click="direction = 'kana-to-romaji'"
-        >Kana → Romaji</button>
+        >{{ $t('learn.toggle.kanaToRomaji') }}</button>
         <button
           class="learn__toggle"
           :class="{ 'learn__toggle--active': direction === 'romaji-to-kana' }"
           @click="direction = 'romaji-to-kana'"
-        >Romaji → Kana</button>
+        >{{ $t('learn.toggle.romajiToKana') }}</button>
       </div>
     </div>
 
     <!-- Basis rows -->
     <div class="learn__section">
-      <h3 class="learn__section-title">Basis (Gojūon)</h3>
+      <h3 class="learn__section-title">{{ $t('learn.sections.base') }}</h3>
       <div v-for="row in baseRows" :key="row.label" class="learn-row">
         <div class="learn-row__header">
           <span class="learn-row__label">{{ row.label }}</span>
           <button class="learn-row__practice-btn" @click="handlePracticeBlock(row.items, row.label)">
-            Diesen Block üben
+            {{ $t('learn.practiceBlock') }}
           </button>
         </div>
         <div class="learn-row__grid">
@@ -55,12 +55,12 @@
 
     <!-- Dakuten rows -->
     <div class="learn__section">
-      <h3 class="learn__section-title">Dakuten &amp; Handakuten</h3>
+      <h3 class="learn__section-title">{{ $t('learn.sections.dakuten') }}</h3>
       <div v-for="row in dakutenRows" :key="row.label" class="learn-row">
         <div class="learn-row__header">
           <span class="learn-row__label">{{ row.label }}</span>
           <button class="learn-row__practice-btn" @click="handlePracticeBlock(row.items, row.label)">
-            Diesen Block üben
+            {{ $t('learn.practiceBlock') }}
           </button>
         </div>
         <div class="learn-row__grid">
@@ -86,12 +86,12 @@
 
     <!-- Yōon rows -->
     <div class="learn__section">
-      <h3 class="learn__section-title">Yōon (Lautkombinationen)</h3>
+      <h3 class="learn__section-title">{{ $t('learn.sections.yoon') }}</h3>
       <div v-for="row in yoonRows" :key="row.label" class="learn-row">
         <div class="learn-row__header">
           <span class="learn-row__label">{{ row.label }}</span>
           <button class="learn-row__practice-btn" @click="handlePracticeBlock(row.items, row.label)">
-            Diesen Block üben
+            {{ $t('learn.practiceBlock') }}
           </button>
         </div>
         <div class="learn-row__grid">
@@ -118,16 +118,12 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { BASE_ROW_DEFS, DAKUTEN_ROW_DEFS, YOON_ROW_DEFS } from '../../kana.js'
-import { allItems, loadProgress, blockFocusIds, blockLabel } from '../../stores/kanaStore.js'
+import { allItems, blockFocusIds, blockLabel } from '../../stores/kanaStore.js'
 
 const router = useRouter()
-
-onMounted(() => loadProgress())
-
-const props = defineProps({ allItems: { type: Array, default: () => allItems } })
 
 function handlePracticeBlock(items, label) {
   blockFocusIds.value = new Set(items.map(i => i.id))
@@ -147,22 +143,22 @@ function toggleFlip(id) {
 }
 
 const baseHiraItems = computed(() =>
-  props.allItems.filter(i => i.script === 'hiragana' && i.group === 'base')
+  allItems.filter(i => i.script === 'hiragana' && i.group === 'base')
 )
 const baseKataItems = computed(() =>
-  props.allItems.filter(i => i.script === 'katakana' && i.group === 'base')
+  allItems.filter(i => i.script === 'katakana' && i.group === 'base')
 )
 const extraHiraItems = computed(() =>
-  props.allItems.filter(i => i.script === 'hiragana' && i.group === 'extra')
+  allItems.filter(i => i.script === 'hiragana' && i.group === 'extra')
 )
 const extraKataItems = computed(() =>
-  props.allItems.filter(i => i.script === 'katakana' && i.group === 'extra')
+  allItems.filter(i => i.script === 'katakana' && i.group === 'extra')
 )
 const yoonHiraItems = computed(() =>
-  props.allItems.filter(i => i.script === 'hiragana' && i.group === 'yoon')
+  allItems.filter(i => i.script === 'hiragana' && i.group === 'yoon')
 )
 const yoonKataItems = computed(() =>
-  props.allItems.filter(i => i.script === 'katakana' && i.group === 'yoon')
+  allItems.filter(i => i.script === 'katakana' && i.group === 'yoon')
 )
 
 const baseRows = computed(() => {

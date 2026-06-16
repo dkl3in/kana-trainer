@@ -99,6 +99,14 @@ export function weightedPick(pool) {
   return pool[pool.length - 1]
 }
 
+function shuffle(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1))
+    ;[arr[i], arr[j]] = [arr[j], arr[i]]
+  }
+  return arr
+}
+
 export function sampleOptions(correctItem, pool, count = 8) {
   const allOfType = quizMode.value === 'meaning' ? meaningItems : readingItems
   const distractorPool = blockFocusIds.value
@@ -109,7 +117,7 @@ export function sampleOptions(correctItem, pool, count = 8) {
     const it = distractorPool[Math.floor(Math.random() * distractorPool.length)]
     picked.add(it)
   }
-  return [correctItem, ...picked].sort(() => Math.random() - 0.5)
+  return shuffle([correctItem, ...picked])
 }
 
 // --- Persistence ---

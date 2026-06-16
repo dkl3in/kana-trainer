@@ -1,4 +1,48 @@
-// JLPT N5 Kanji — 80 characters in standard JLPT frequency/level order
+/**
+ * @typedef {Object} KanjiExample
+ * @property {string} word    - Example word in kanji/kana
+ * @property {string} reading - Furigana reading
+ * @property {string} meaning - German translation
+ */
+
+/**
+ * Raw kanji data entry as stored in n5Kanji.
+ * @typedef {Object} KanjiEntry
+ * @property {string}          kanji    - The kanji character
+ * @property {string[]}        onyomi   - On'yomi readings (katakana)
+ * @property {string[]}        kunyomi  - Kun'yomi readings (hiragana)
+ * @property {string[]}        meaning  - German meanings; meaning[0] is the primary answer
+ * @property {KanjiExample}    [example] - Optional example word
+ */
+
+/**
+ * A single kanji quiz item (reactive).
+ * @typedef {Object} KanjiItem
+ * @property {string}          id         - Unique ID: `kanji-${type}-${idx}-${kanji}`
+ * @property {string}          kanji      - The kanji character
+ * @property {string}          prompt     - What is shown in the quiz (= kanji)
+ * @property {string}          answer     - Correct answer text (meaning or readingStr)
+ * @property {string[]}        allMeanings
+ * @property {string[]}        onyomi
+ * @property {string[]}        kunyomi
+ * @property {string}          readingStr - On'yomi + Kun'yomi joined with " · "
+ * @property {KanjiExample|null} example
+ * @property {'meaning'|'reading'} type
+ * @property {number}          correct
+ * @property {number}          wrong
+ * @property {number}          streak
+ * @property {number}          weight
+ */
+
+/**
+ * A category group definition used by KanjiLearnView and KanjiOverviewView.
+ * @typedef {Object} KanjiCategoryDef
+ * @property {string} label - Display label
+ * @property {number} start - Start index (inclusive) into n5Kanji
+ * @property {number} end   - End index (exclusive) into n5Kanji
+ */
+
+// JLPT N5 Kanji — 85 characters in standard JLPT frequency/level order
 // Format: { kanji, onyomi[], kunyomi[], meaning[], example? }
 export const n5Kanji = [
   // Numbers
@@ -98,8 +142,12 @@ export const n5Kanji = [
   { kanji: '新', onyomi: ['シン'], kunyomi: ['あたら-', 'にい-'], meaning: ['neu'], example: { word: '新幹線', reading: 'しんかんせん', meaning: 'Shinkansen' } }
 ]
 
-// Creates quiz items from kanji data
-// Two items per kanji: one for meaning quiz, one for reading quiz
+/**
+ * Creates meaning and reading quiz items from raw kanji data.
+ * Each kanji produces two items: one meaning item and one reading item.
+ * @param {KanjiEntry[]} arr
+ * @returns {{ meaningItems: KanjiItem[], readingItems: KanjiItem[] }}
+ */
 export function makeKanjiItems(arr) {
   const meaningItems = []
   const readingItems = []
@@ -142,7 +190,7 @@ export function makeKanjiItems(arr) {
   return { meaningItems, readingItems }
 }
 
-// Category groups for LearnView and OverviewView
+/** @type {KanjiCategoryDef[]} */
 export const KANJI_CATEGORY_DEFS = [
   { label: 'Zahlen (1–13)', start: 0, end: 13 },
   { label: 'Zeit', start: 13, end: 20 },

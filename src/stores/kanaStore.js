@@ -85,7 +85,7 @@ export const activePool = computed(() => {
   if (blockFocusIds.value) {
     return allItems.filter(i => blockFocusIds.value.has(i.id))
   }
-  let pool = []
+  let pool
   if (mode.value === 'hiragana') pool = activeBaseHira.value
   else if (mode.value === 'katakana') pool = activeBaseKata.value
   else pool = activeBaseHira.value.concat(activeBaseKata.value)
@@ -112,8 +112,8 @@ export const wrongList = computed(() =>
 
 export const badges = computed(() => {
   const totalCorrect = allItems.reduce((s, i) => s + i.correct, 0)
-  const totalDakuten = 50
-  const totalYoon = 66
+  const totalDakuten = extraHiragana.length + extraKatakana.length
+  const totalYoon = yoonHiragana.length + yoonKatakana.length
   return [
     { id: 'b1', icon: 'carbon:sprout', titleKey: 'badges.firstHit', unlocked: totalCorrect >= 1 },
     { id: 'b2', icon: 'carbon:fire', titleKey: 'badges.ten', unlocked: totalCorrect >= 10 },
@@ -142,6 +142,14 @@ export function weightedPick(pool) {
   return pool[pool.length - 1]
 }
 
+function shuffle(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1))
+    ;[arr[i], arr[j]] = [arr[j], arr[i]]
+  }
+  return arr
+}
+
 export function sampleOptions(correctItem, pool, count = 8) {
   const distractorPool = blockFocusIds.value
     ? allItems.filter(i => i.id !== correctItem.id && i.script === correctItem.script && i.group === correctItem.group)
@@ -151,7 +159,7 @@ export function sampleOptions(correctItem, pool, count = 8) {
     const it = distractorPool[Math.floor(Math.random() * distractorPool.length)]
     picked.add(it)
   }
-  return [correctItem, ...picked].sort(() => Math.random() - 0.5)
+  return shuffle([correctItem, ...picked])
 }
 
 // --- Persistence ---
