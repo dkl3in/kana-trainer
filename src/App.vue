@@ -163,7 +163,7 @@
     <!-- Bottom Navigation -->
     <nav class="bottom-nav">
       <button class="bottom-nav__btn" :class="{ 'bottom-nav__btn--active': view === 'quiz' }" @click="view = 'quiz'" aria-label="Quiz">
-        <Icon icon="carbon:flash" />
+        <Icon icon="carbon:quiz" />
       </button>
       <button class="bottom-nav__btn" :class="{ 'bottom-nav__btn--active': view === 'learn' }" @click="view = 'learn'" aria-label="Lernen">
         <Icon icon="carbon:education" />
