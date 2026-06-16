@@ -156,8 +156,8 @@ function shuffle(arr) {
 
 export function sampleOptions(correctItem, pool, count = 8) {
   const distractorPool = blockFocusIds.value
-    ? allItems.filter(i => i.id !== correctItem.id && i.script === correctItem.script && i.group === correctItem.group)
-    : pool.filter(i => i.id !== correctItem.id)
+    ? allItems.filter(i => i.id !== correctItem.id && i.romaji !== correctItem.romaji && i.script === correctItem.script && i.group === correctItem.group)
+    : pool.filter(i => i.id !== correctItem.id && i.romaji !== correctItem.romaji)
   const picked = new Set()
   while (picked.size < count - 1 && distractorPool.length > picked.size) {
     const it = distractorPool[Math.floor(Math.random() * distractorPool.length)]
